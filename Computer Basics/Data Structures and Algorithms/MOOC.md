@@ -9,7 +9,6 @@
 常系数可忽略
 低次项可以忽略
 大O记号在足够大的时候悲观估计
-
 ### 大O记号刻度
 1. 常数复杂度
 常数包括常数、常数的基本运算、常数的高阶运算
@@ -45,3 +44,85 @@
 1天 = 10^5 sec
 1世纪 = 3 * 10^9 sec
 300 年 = 10^10 sec
+## 迭代与递归
+### 递归跟踪
+检查每一个递归实例累积所需时间，其总和即算法执行时间
+### 递归方程
+相当于解数列
+### 算法：简而治之
+T（n）=T（n-1）+O（1）
+T（1）= O（1）
+T（n） - n = T(n-1) - (n-1)
+数列求解得T（n）= O（1）+ n = O（n）
+### 算法：分而治之
+T（n）=2*T（n/2）+O（1）
+T（1） = O（1）
+T(n) + C1 = 2* (T(n/2) + C1)
+T（n）=2* logn *(T(1) +C1) - C1 = n *(C1+C2)=O(n)
+## 动态规划
+动态规划：通过递归找出算法本质，找到初步解之后，等效转换成迭代
+### fib():递归
+fib（n） = fib（n-1） + fib（n-2）
+#### 递归版
+```C++
+int fib(n) {return (2>n) ? n : fib(n-1) + fib(n-2)}
+```
+复杂度T（n）=T（n-1）+T（n-2）+1；T（0）=T（1）=1
+令S(n)=[ T(n)+1 ] /2
+S(0) = 1 = fib(1); S(1) = 1 = fib(2)
+S(n) = S(n-1) +S(n-2) = fib(n+1)
+T(n) = 2 * S(n) -1 = 2 *fib(n+1)-1 = O(fib(n+1)) = O(2^n)
+封底估算：Φ^36 = 2^25 ; Φ^5 = 10
+递归版抵消的根源在于个递归实例均被大量重复地调用
+#### 迭代版本
+1. 记忆（memoization）
+将已计算过的实例结果制表备查
+2. 动态规划
+颠倒计算方向：由自顶而下递归为自底而上迭代
+```C++
+f = 0;g = 1;
+while (0< n--){
+    g = g + f;
+    f = g - f;
+}
+return g;
+```
+复杂度T（n） = O（n），而且仅需O（1）空间
+### LCS：最长公共子序列
+#### 递归版本
+```python
+def LCS(X,Y):
+    if not X or not Y:
+        return 0, ''
+    if X[-1] == Y[-1]:
+        length,s = LCS(X[:-1] , Y[:-1])
+        return length + 1,s + X[-1]
+    else:
+        length1,s1 = LCS(X[:-1] , Y)
+        length2,s2 = LCS(X , Y[:-1])
+        if length1 >= length2:
+            return length1 , s1
+        else:
+            return length2 , s2
+```
+单调性：没经过一次比对，原问题规模必可减小
+#### 动态规划的迭代版本
+```python
+def LCS2(X,Y):
+    arr = np.zeros((len(X)+1, len(Y)+1))
+    i = 0;j = 0
+    s = ""
+    if not X or not Y:
+        return 0, ''
+    else:
+        while i in range(len(X)):
+            while j in range(len(Y)):
+                if X[i] == Y[j]:
+                    arr[i+1,j+1] = arr[i,j] + 1
+                    s += X[i]
+                else :
+                    arr[i+1,j+1] = max(arr[i,j+1] , arr[i+1,j])
+                j += 1
+            j = 0;i += 1
+        return arr[-1,-1] , s 
+```
