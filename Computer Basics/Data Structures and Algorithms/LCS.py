@@ -1,5 +1,5 @@
 import numpy as np
-# 迭代法
+# 递归法
 def LCS1(X,Y):
     if not X or not Y:
         return 0, ''
