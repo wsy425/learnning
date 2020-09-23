@@ -40,3 +40,53 @@ def reverse(self, x: int) -> int:
     return res if x>0 else -res
 ```
 一次构建反转整数的一位数字。
+
+# 9.回文数
+判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+## 转换为str
+```python
+def isPalindrome(self, x: int) -> bool:
+    s = str(x)
+    return s == s[::-1]
+```
+## 不转换为str
+```python
+def isPalindrome(self, x: int) -> bool:
+    if x < 0:
+        return False
+    elif x == 0:
+        return True
+    else:
+        import math
+        length = int(math.log(x,10)) + 1
+        L = length -1
+        for i in range(length // 2):
+            if x // 10 ** L != x % 10:
+                return False
+            x = (x % 10 ** L) // 10
+            L -= 2
+        return True
+```
+利用整除10** n删除n位以后数字（前序数字降位数），除10**n留余数保留n位及以后数字的数学特性
+
+# 13.罗马数字转整数
+给定一个罗马数字，将其转换成整数。输入确保在 1 到 3999 的范围内
+```python
+def romanToInt(self, s: str) -> int:
+    dic = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000} 
+    num = 0
+    for i , n in enumerate(s):
+        if i < len(s)-1 and dic[s[i]] < dic[s[i + 1]]: 
+            num -= dic[s[i]]
+        else:
+            num += dic[s[i]]
+    return num
+```
+1. 使用哈希表存储数据
+2. 在判定的时候要先判定i< len(s) -1
+3. 相同意义下可以将代码简化
+```python
+def romanToInt(self, s: str) -> int:
+    dic = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}
+    return sum (-dic[s[i]] if i < len(s)-1 and dic[s[i]]<dic[s[i+1]] else dic[s[i]] for i, n in enumerate(s))
+```

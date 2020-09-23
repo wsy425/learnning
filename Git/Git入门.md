@@ -82,3 +82,23 @@ pretty支持让我们自己DIY想看到的log展示
 `git log --pretty=format:"%h - %ad - %an - %s"`
 官方提供了pretty参数表格
 ![微信图片_20200921094811.jpg](https://i.loli.net/2020/09/21/vfGtcBTqO7rmVnQ.jpg)
+
+# git恢复相关
+## git中删除文件
+`git rm`
+将文件从git以及文件系统当中一起移除（本地仓库、暂存、本地都删）
+提交后从下一个提交开始这个文件就不会被存储一份了
+留下添加文件和删除文件两条记录
+## git中删除记录
+`git commit --amend`
+在删除文件后使用该指令在当前commit上修补而不是提交新的commit，这样就不会留下记录了
+* 如果记录已经push到远程，使用该指令会导致和远程记录不吻合，需要使用`git push -f`强行push，但这会覆盖远程commit，可能会导致其他人代码紊乱
+## 删除暂存区文件
+`git rm --cached`
+尚未commit的文件仅删除暂存区，保留本地文件
+## 回滚commit版本
+`git reset --soft HEAD^`
+所有文件状态返回某一个commit的版本
+## 回滚文件版本
+`git checkout -- filename`
+将文件恢复到之前提交的状态（本地和暂存都是）
