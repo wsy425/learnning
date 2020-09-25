@@ -102,3 +102,41 @@ pretty支持让我们自己DIY想看到的log展示
 ## 回滚文件版本
 `git checkout -- filename`
 将文件恢复到之前提交的状态（本地和暂存都是）
+
+# git分支(branch)
+## git结构
+在git当中我们使用的分支其实是一个一个在commit当中切换的指针
+例子：
+![QQ图片20200924103419.png](https://i.loli.net/2020/09/24/djGq2kYrOavHoCm.png)
+## 创建分支
+`git branch XXX`
+`git checkout -b XXX`
+## HEAD指针
+指向当前代码仓库的位置
+可以移动到任意结点上
+移动HEAD指针
+`git checkout (commit id/分支名)`
+## 分支合并
+`git checkout master`
+`git merge test`
+将test合并到master上
+### 快速合并(fast-forward)
+test分支是从master分支当中切出去的，后来master分支就再也没有进行过改动
+合并的时候，其实只需要移动master指针到test分支上即可
+### 创建新commit
+test分支是从master分支当中切出去后来master分支有改动
+由于不是直接上下游关系了，所以git创建了一个新的commit用来合并两个分支的代码
+合并之后应该删除没用的分支
+`git branch -d test`
+## 合并分支冲突
+### 查看冲突
+`git diff`
+### 手动解决
+把提示行去掉
+留下想要的代码，重新add、commit
+### 放弃合并
+`git merge --abort`
+### git合并工具
+git merge tool
+不好用，一般不用
+### IDE工具

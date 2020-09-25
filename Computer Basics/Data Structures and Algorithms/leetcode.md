@@ -90,3 +90,58 @@ def romanToInt(self, s: str) -> int:
     dic = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}
     return sum (-dic[s[i]] if i < len(s)-1 and dic[s[i]]<dic[s[i+1]] else dic[s[i]] for i, n in enumerate(s))
 ```
+
+# 14. 最长公共前缀
+编写一个函数来查找字符串数组中的最长公共前缀。
+如果不存在公共前缀，返回空字符串 ""
+## 字符串拼接
+```python
+def longestCommonPrefix(self, strs: List[str]) -> str:
+    if not strs:
+        return ""
+    result = ""
+    i = j = 0
+    while j < len(strs[0]):
+        cur = strs[0][j]
+        while i < len(strs):
+            if j > len(strs[i]) - 1 or strs[i][j] != cur:
+                return result
+            i += 1
+        i = 0
+        result += cur #字符串的拼接
+        j += 1
+    return result
+```
+## zip打包
+```python
+def longestCommonPrefix(self, strs: List[str]) -> str:
+    res = ''
+    for c in zip(*strs): 
+        if len(set(c)) == 1:
+            res = res + c[0]
+        else:
+            break
+    return res
+```
+zip(*):解压，返回每个数据的第一个值
+set():不会存储相同元素
+
+# 20. 有效的括号
+给定一个只包括 '('，')'，'{'，'}'，'[ '，']' 的字符串，判断字符串是否有效。
+有效字符串需满足：
+左括号必须用相同类型的右括号闭合。
+左括号必须以正确的顺序闭合。
+注意空字符串可被认为是有效字符串。
+```python
+def isValid(self, s: str) -> bool:
+    dic = {')':'(',']':'[','}':'{'}
+    stack = []
+    for i in s:
+        if stack and i in dic: #这一步的判定没弄懂
+            if stack[-1] == dic[i]: 
+                stack.pop()
+            else: return False
+        else:
+            stack.append(i)
+    return not stack
+```

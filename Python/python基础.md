@@ -18,6 +18,10 @@ full_name = first_name + " " + last_name
 rstrip():暂时删除字符串末尾空白
 lstrip():暂时删除字符串开头空白
 strip():暂时删除字符串两端空白
+5. 历遍字符串
+```python
+for i , n in enumerate(s):
+```
 ## 数字
 ### 整数（int）
 ### 浮点数（float）
@@ -184,3 +188,79 @@ dimensions = (200,50)
 ### if-elif-else
 ### 多个elif
 ### 省略else
+
+# 字典
+## 使用字典
+字典是一系列键——值对，每个键都与一个值相关，使用键来访问与之相关的值
+```python
+alien_0 = {'color':'green'}
+```
+'color'是键，与之相关的值是'green'
+### 访问字典
+```python
+alien_0 = {'color':'green'}
+print（alien_0['color']） 
+```
+### 创建字典
+```python
+alien_0 = {}
+alien_0['color'] = 'green'
+```
+### 修改字典中的值
+```python
+alien_0 = {'color':'green'}
+alien_0['color'] = 'yellow'
+```
+### 删除键——对值
+```python
+alien_0 = {'color':'green' , 'points':5}
+del ailen_0['points']
+```
+## 历遍字典
+### 历遍所有键——值对
+.items()
+```python
+alien_0 = {'color':'green' , 'points':5}
+for key,value in alien_0.items():
+```
+### 历遍字典中的所有键
+.keys()
+```python
+alien_0 = {'color':'green' , 'points':5}
+for key,value in alien_0.keys():
+```
+### 历遍字典中的所有值
+.values()
+```python
+alien_0 = {'color':'green' , 'points':5}
+for key,value in alien_0.values():
+```
+## 嵌套
+### 字典列表
+```python
+alien_0 = {'color':'green' , 'points':5}
+alien_1 = {'color':'yellow' , 'points':10}
+alien_2 = {'color':'red' , 'points':15}
+aliens = [alien_0 , alien_1 , alien_2]
+for alien in aliens:
+    if alien['color'] == 'green':
+        print(alien['points'])
+```
+### 字典中存储列表
+```python
+favorite_languages = {'jen':['python' , 'ruby'] , 'sarah':['ruby' , 'go'] , 'edward':['c']}
+for name,languages in favorite_languages.item():
+    for language in  languages:
+        print(language)
+```
+### 字典中存储字典
+```python
+users = {
+    'aeinstein': {'first': 'albert' , 'last': 'einstein' ,'location':'princeton'},
+    'mcurie': {'first': 'marie' , 'last': 'curie' , 'location': 'paris'}
+    }
+for username,user_info in users.item():
+    print("\nUsername: " + username)
+    for key,value in user_info:
+        print(key + value)
+```
