@@ -140,3 +140,35 @@ test分支是从master分支当中切出去后来master分支有改动
 git merge tool
 不好用，一般不用
 ### IDE工具
+
+# 远程分支
+## origin指针
+和master指针性质一样，代表远程远程仓库
+## 操作命令
+### 代码拉取
+`git fetch`:将远程改动同步到本地（针对远程的所有改动），如果有多个远程的话要指定远程名称
+`git pull`只针对当前分支对应的远程分支，而且多了一步merge合并操作
+### 代码推送
+本地的分支是不会自动和远程同步的
+`git push origin test`
+`git branch --set-upstream-to master origin/master`：将本地分支和远程建立映射
+映射之后就可以直接使用`git push`
+
+# git rebase
+## rebase简介
+提取我们在A分支上的改动，然后应用在B分支的代码上
+```git
+git checkout bugFix
+git rebase master
+git checkout master
+git merge bugFix
+```
+![微信图片_20201009152241.jpg](https://i.loli.net/2020/10/09/cI5BlCJLYvP2qEk.jpg)![微信图片_20201009152228.jpg](https://i.loli.net/2020/10/09/x12JH6UfGSPVFoy.jpg)
+### onto参数
+确定rebase的范围
+`git rebase --onto master feature bugFix`
+git执行这条命令的时候会先找到feature和bugFix的共同祖先，然后将共同祖先之后的部分rebase到master
+## 实践网站
+[图形化演示网站](learngitbranching.js.org)
+## 使用禁忌
+如果还有其他分支依赖了当前分支，我们这时候不可以使用rebase
