@@ -145,3 +145,51 @@ def isValid(self, s: str) -> bool:
             stack.append(i)
     return not stack
 ```
+
+# 149.环形链表
+给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null
+```python
+def detectCycle(self, head: ListNode) -> ListNode:
+    list1 = []
+    per = head
+    while True:
+        if not(per and per.next):
+            return 
+        elif per in list1:
+            return per
+        list1.append(per)
+        per = per.next 
+```
+## 双向链表
+```python
+def detectCycle(self, head: ListNode) -> ListNode:
+    fast , slow = head , head
+    while True:
+        if not (fast and fast.next): return
+        fast , slow = fast.next.next , slow.next
+        if fast == slow: break
+    fast = head
+    while fast != slow:
+        fast , slow = fast.next , slow.next
+    return fast
+```
+双向链表，设链表共有a+b个节点，其中链表头部到链表入口有a个节点（不计链表入口节点），链表环有b个节点；设两指针分别走了f，s步，则有：
+fast走的步数是slow步数的2倍，即f = 2s；
+fast 比 slow多走了n个环的长度，即 f = s + nb；
+以上两式相减得：f = 2nb，s = nb，即fast和slow 指针分别走了2n，n个环长
+slow再走a = 入口；head走到入口 = a
+
+# 21. 合并两个有序链表
+将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的
+```python
+def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1: return l2
+        if not l2: return l1
+        if l1.val < l2.val:
+            l1.next = self.mergeTwoLists(l1.next , l2)
+            return l1
+        else:
+            l2.next = self.mergeTwoLists(l1 , l2.next)
+            return l2
+```
+递归

@@ -302,3 +302,124 @@ while current_number < 10:
         continue
     print(current_number)
 ```
+
+# 函数
+## 定义函数
+```python
+def greet_user(username):
+    print('Hello' + username.title() + '!')
+
+greet_user()
+```
+输入的username是一个形参，如果直接输入信息则为实参
+## 传递实参
+### 位置实参
+一种函数调用中的实参与函数定义中的形参的关联方式，基于实参的顺序
+```python
+def describe_pet(animal_type , pet_name):
+    print("\nI have a" + animal_type + ',')
+    print('My' + animal_type + "'s name is" + pet_name.title() + '.')
+
+describe_pet('hamster' , 'harry')
+```
+### 关键字实参
+传递给函数名称——值对
+```python
+def describe_pet(animal_type , pet_name):
+    print("\nI have a" + animal_type + ',')
+    print('My' + animal_type + "'s name is" + pet_name.title() + '.')
+
+describe_pet(animal_type ='hamster' , pet_name = 'harry')
+```
+### 默认值
+定义函数时可以设置默认值
+```python
+def describe_pet(animal_type , pet_name = 'harry'):
+    print("\nI have a" + animal_type + ',')
+    print('My' + animal_type + "'s name is" + pet_name.title() + '.')
+
+describe_pet('hamster')
+```
+## 返回值
+### 返回简单值
+```python
+def get_formatted_name(first_name, last_name):
+    full_name = first_name + ' ' + last_name
+    return full_name.title()
+
+musician = get_formatted_name('jimi', 'hendrix')
+print(musician)
+```
+### 令实参变成可选的
+```python
+def get_formatted_name(first_name, last_name , middle_name = ''):
+    full_name = first_name + ' ' + middle_name + ' ' + last_name
+    return full_name.title()
+
+musician = get_formatted_name('jimi', 'hendrix')
+print(musician)
+```
+### 返回字典
+```python
+def build_person(first_name, last_name):
+    person = {'first': first_name, 'last': last_name}
+    return person
+
+musician = get_formatted_name('jimi', 'hendrix')
+print(musician)
+```
+### 结合使用函数和while
+```python
+def get_formatted_name(first_name, last_name):
+    full_name = first_name + ' ' + last_name
+    return full_name.title()
+while True:
+    print("\nPlease tell me your name:")
+    print("(enter 'q' at any time to quit)")
+    f_name = input("First name: ")
+    if f_name == 'q':
+        break
+    l_name = input("Last name: "
+    if l_name == 'q':
+        break
+    formatted_name = get_formatted_name(f_name, l_name)
+    print("\nHello, " + formatted_name + "!"
+```
+## 传递列表
+```python
+def greet_users(names):
+    for name in names:
+        msg = "Hello, " + name.title() + "!"
+        print(msg)
+
+usernames = ['hannah', 'ty', 'margot']
+greet_users(usernames)
+```
+### 禁止函数修改列表
+```python
+def function(list_name):
+
+function(list1[:])
+```
+通过传递列表副本禁止函数修改列表
+## 传递任意数量的实参
+```python
+def make_pizza(*toppings):
+    print("\nMaking a pizza with the following toppings:")
+    for topping in toppings:
+        print("- " + topping)
+
+make_pizza('mushrooms', 'green peppers', 'extra cheese')
+```
+形参名*toppings中的星号让Python创建一个名为toppings的空元组，并将收到的所有值都封装到这个元组中
+### 位置实参和任意数量实参结合
+先匹配位置实参和关键字实参，剩余实参都收集到最后一个任意数量形参中去
+## 将函数存储在模块中
+模块是扩展名为.py的文件，包含要导入到程序中的代码
+```python
+import pizza
+from module_name import function_0, function_1, function_2
+from pizza import make_pizza as mp
+import pizza as p
+from pizza import * #导入模块中所有函数
+```
