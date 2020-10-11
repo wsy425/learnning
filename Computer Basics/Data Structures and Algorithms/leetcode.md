@@ -67,7 +67,7 @@ def isPalindrome(self, x: int) -> bool:
             L -= 2
         return True
 ```
-利用整除10** n删除n位以后数字（前序数字降位数），除10**n留余数保留n位及以后数字的数学特性
+利用整除10^n删除n位以后数字（前序数字降位数），除10^n留余数保留n位及以后数字的数学特性
 
 # 13.罗马数字转整数
 给定一个罗马数字，将其转换成整数。输入确保在 1 到 3999 的范围内
@@ -180,7 +180,7 @@ fast 比 slow多走了n个环的长度，即 f = s + nb；
 slow再走a = 入口；head走到入口 = a
 
 # 21. 合并两个有序链表
-将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的
+将两个升序链表合并为一个新的升序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的
 ```python
 def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
         if not l1: return l2
@@ -193,3 +193,93 @@ def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
             return l2
 ```
 递归
+
+# 416.分割等和子集
+给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+## 递归法
+```python
+def canPartition(self, nums: List[int]) -> bool:
+    s = sum(nums)
+    if s % 2 == 1:
+        return False
+    target = s // 2
+    n = len(nums)
+    def dfs(current , i):
+        if current == target:
+            return True
+        if i>=n or current>target:
+            return False
+        return t(current+nums[i] , i+1) or t(current,i+1)
+    return dfs(0,0)
+```
+## 动态规划法
+状态转移方程：创建一个二维数组，包含n行target+1列，其中dp[i][j]表示从数组的[0 ,i]下标范围内选取若干个正整数，是否存在一种选取方案使得被选取的正整数的和等于j。初始时，dp中的全部元素都是false
+这种二维数组的判定性质如下：
+![状态转移方程.png](https://assets.leetcode-cn.com/solution-static/416/6.png)
+第0行true证明i=0时可能出现的总数
+从第1行起，true的判定是正上方状态和左num[i]位正上方的或门
+最后dp[n−1][target] 即为答案
+```python
+def canPartition(nums):
+    s = sum(nums)
+    n = len(nums)
+    if s % 2 == 1 or n<2 or max(nums)>s // 2:
+        return False
+    target = s // 2
+    dp = [[0]*(target+1) for i in range(n)]
+    dp[0][nums[0]] = 1
+    for i in range(n):
+        dp[i][0] = 1
+    for i in range(1,n):
+        for j in range(1,target+1):
+            if j>=nums[i]:
+                dp[i][j] = dp[i-1][j] or dp[i-1][j-nums[i]]
+            else:
+                dp[i][j] = dp[i-1][j]
+    return dp[-1][-1] == 1
+```
+## 动态规划优化
+```python
+def canPartition(self, nums: List[int]) -> bool:
+    total_sum = sum(nums)
+    n = len(nums)
+    if total_sum%2==1:
+        return False 
+    half_sum = total_sum//2
+    dp = [0]*(half_sum+1)
+    dp[0]=1
+    if nums[0]<=half_sum:
+        dp[nums[0]]=1
+    for i in range(1,n):
+        for j in range(half_sum,-1,-1):
+            if nums[i]<=j:
+                dp[j] = dp[j] or dp[j-nums[i]]
+    return dp[-1]
+```
+
+# 26.删除排序数组中的重复项
+给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+不要使用额外的数组空间，你必须在原地修改输入数组 并在使用O(1)额外空间的条件下完成。
+## 双指针法
+```python
+def removeDuplicates(self, nums: List[int]) -> int:
+    i , j = 0 , 1
+    while j < len(nums):
+        if nums[i] == nums[j]:
+            j += 1
+        else:
+            i += 1
+            nums[i] = nums[j]
+    return i+1
+```
+## 单指针法
+```python
+def removeDuplicates(self, nums: List[int]) -> int:
+    i = 0
+    while i < len(nums)-1:
+        if nums[i] == nums[i+1]:
+            del nums[i]
+            i -= 1
+        i += 1
+    return i+1
+```

@@ -1,5 +1,5 @@
 # 递归法
-def fbi1(n):
+'''def fbi1(n):
     if n<2:
         return 1
     else:
@@ -12,3 +12,4 @@ while (0 < n):
     g = g + f
     f = g - f
     return g
+'''

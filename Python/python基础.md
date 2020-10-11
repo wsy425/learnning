@@ -423,3 +423,232 @@ from pizza import make_pizza as mp
 import pizza as p
 from pizza import * #导入模块中所有函数
 ```
+
+# 类
+1. 面向对象：编写表示现实世界中的事物和情景的类，基于这些类来创建对象
+2. 实例化：根据类来创建对象
+## 创建和使用类
+### 创建类
+```python
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(self.name.title() + " is now sitting.")
+
+    def roll_over(self):
+        print(self.title() + " rolled over!")
+```
+1. 类中的函数称为方法，与函数的差别在于调用方法的方式。方法`__init__()`很特殊，根据Dog类创建新实例时，python都会自动运行它。
+2. 对于方法`__init__()`，形参self必不可少且必须位于其他形参前面，是指向实例本身的引用，让实例能够访问类中的属性和方法
+3. 属性：以self为前缀的变量，可供类中所有方法使用，可以通过类的任何实例来访问这些变量
+### 根据类创建实例
+#### 访问属性
+```python
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(self.name.title() + " is now sitting.")
+
+    def roll_over(self):
+        print(self.title() + " rolled over!")
+
+my_dog = Dog('willie', 6）
+print(my_dog.name)
+```
+#### 调用方法
+```python
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(self.name.title() + " is now sitting.")
+
+    def roll_over(self):
+        print(self.title() + " rolled over!")
+
+my_dog = Dog('willie', 6）
+my_dog.sit()
+my_dog.roll_over()
+```
+## 使用类和实例
+### 给属性指定默认值
+```python
+class Car():
+    def __int__(self , make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0 #对该属性设定初始值在方法__int__中就不需要该属性的形参
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self):
+        print("This car has" + str(self.odometer_reading) + "miles on it.")
+
+my_new_car = Car('audi' , 'a4' , 2016)
+my_new_car.read_odometer()
+```
+### 修改属性值
+#### 直接修改属性值
+```python
+class Car():
+    def __int__(self , make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0 
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self):
+        print("This car has" + str(self.odometer_reading) + "miles on it.")
+
+my_new_car = Car('audi' , 'a4' , 2016)
+my_new_car.odometer_reading = 23 #直接在外部修改类内属性值
+my_new_car.read_odometer()
+```
+#### 通过方法修改属性的值
+```python
+class Car():
+    def __int__(self , make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0 
+    #设置一个def的方法
+    def update_odometer(self,mileage):
+        self.odometer_reading = mileage
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self):
+        print("This car has" + str(self.odometer_reading) + "miles on it.")
+
+my_new_car = Car('audi' , 'a4' , 2016)
+my_new_car.update_odometer(23)
+my_new_car.read_odometer()
+```
+## 继承
+编写类时，并非总是要从空白开始。如果你要编写的类是另一个现成类的特殊版本，可使用继承继承。一个类继承继承另一个类时，它将自动获得另一个类的所有属性和方法；原有的类称为父类父类，而新类称为子类子类。子类继承了其父类的所有属性和方法，同时还可以定义自己的属性和方法
+### 子类的方法__int__()
+创建子类时，父类必须包含在当前文件中，且位于子类前面
+```python
+class Car():
+    def __int__(self , make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0 
+    def update_odometer(self,mileage):
+        self.odometer_reading = mileage
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self):
+        print("This car has" + str(self.odometer_reading) + "miles on it.")
+
+class ElectricCar(Car):
+    def __int__(self, make, model, year):
+        super().__int__(make, model, year)#将父类和子类关联起来
+
+my_tesla = ElectricCar('tesla', 'model s', 2016)
+print(my_tesla,get_descriptive_name())
+```
+### 给子类定义属性和方法
+```python
+class Car():
+    def __int__(self , make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0 
+    def update_odometer(self,mileage):
+        self.odometer_reading = mileage
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self):
+        print("This car has" + str(self.odometer_reading) + "miles on it.")
+
+class ElectricCar(Car):
+    def __int__(self, make, model, year):
+        super().__int__(make, model, year)
+        self.battery_size = 70 #子类设置新的属性
+    
+    def describe_battery(self):
+        print("This car has a" + str(self.battery_size) + "-kWh battery.")
+
+my_tesla = ElectricCar('tesla', 'model s', 2016)
+print(my_tesla,get_descriptive_name())
+my_tesla.describe_battery()
+```
+### 重写父类的方法
+对于父类的方法，只要它不符合子类模拟的实物的行为，都可对其进行重写。为此，可在子类中定义一个这样的方法，即它与要重写的父类方法同名。这样，Python将不会考虑这个父类方法，而只关注你在子类中定义的相应方法
+```python
+class Car():
+    def __int__(self , make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.gas_tank = 0 
+    def fill_gas_tank(gas):
+        gas_tank += gas
+
+class ElectricCar(Car):
+    def __int__(self, make, model, year):
+        super().__int__(make, model, year)
+    # 添加一种父类里存在的方法改写父类
+    def fill_gas_tank():
+        print("This car doesn't need a gas tank!")
+```
+### 将实例用作属性
+```python
+class Car():
+    def __int__(self , make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.gas_tank = 0 
+    def fill_gas_tank(gas):
+        gas_tank += gas
+
+class Battery():
+    def __int__(self, battery_size = 70):
+        self.battery_size = battery_size
+    def describe_battery(self):
+        print("This car has a" + str(self.battery_size) + "-kWh battery.")
+
+class ElectricCar(Car):
+    def __int__(self, make, model, year):
+        super().__int__(make, model, year)
+        self.battery = Battery() #将属性连接上前面的实例
+
+my_tesla = ElectricCar('tesla', 'model s', 2016)
+my_tesla.battery.describe_battery()
+```
+## 导入类
+### 导入单个类
+```python
+from car import Car
+```
+### 从一个模块中导入多个类
+```python
+from car import Car, ElectricCar
+```
+### 导入整个模块
+```python
+import car
+```
+### 导入模块中的所有类
+```python
+from module_name import *
+```
+### 在一个模块中导入另一个模块
