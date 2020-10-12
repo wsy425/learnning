@@ -283,3 +283,50 @@ def removeDuplicates(self, nums: List[int]) -> int:
         i += 1
     return i+1
 ```
+# 530. 二叉搜索树的最小绝对差
+给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。
+关键在二叉搜索树的性质上，左子树<根<右子树，中序历遍可以得到一个升序数列
+```python
+diff , per = 999, 999
+def getMinimumDifference(self, root: TreeNode) -> int:
+    def Search(root):
+        if root == None:
+            return
+        
+        Search(root.left)
+        self.diff = min(self.diff , abs(self.per - root.val))
+        self.per = root.val
+        Search(root.right)
+    
+    Search(root)
+    return self.diff
+```
+
+# 27.移除元素
+给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。
+不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
+元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。
+## 单指针
+更快但内存消耗多
+```python
+def removeElement(self, nums: List[int], val: int) -> int:
+    i = 0
+    while i <len(nums):
+        if nums[i] == val:
+            del nums[i]
+            i -= 1
+        i += 1
+    return i
+```
+## 双指针
+内存消耗少，但速度更慢
+```python
+def removeElement(self, nums: List[int], val: int) -> int:
+    i ,j= 0, 0
+    while j <len(nums):
+        if nums[j] != val:
+            nums[i] = nums[j]
+            i += 1
+        j += 1
+    return i
+```
