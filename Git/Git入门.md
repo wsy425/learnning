@@ -172,3 +172,21 @@ git执行这条命令的时候会先找到feature和bugFix的共同祖先，然�
 [图形化演示网站](learngitbranching.js.org)
 ## 使用禁忌
 如果还有其他分支依赖了当前分支，我们这时候不可以使用rebase
+
+# git show
+查看代码层面的改动
+## 查看某个commit下的改动
+`git show commit_id`
+commit id的查找
+`git log --stat`列举每个commit具体到文件级别的改动
+`git log --pretty=online`将git提交记录压缩成一行
+## 查看分支下的改动
+`git show test`查看test分支下最后一个提交节点的改动
+`git show test^`查看test分支下最后一个节点的父节点改动
+`git show test~3`查看test分支下最后一个节点的前第三个父节点
+
+# git reflog
+reflog = reference log
+查看引用日志
+第一列表示commit id；第二列表示分支；第三列表示相对位置，相对于现在HEAD指针的位置；最后一列记录HEAD指针移动情况
+可以通过这个方式查找git log无法查找在现在HEAD指针之后提交过的commit id，然后checkout指针恢复

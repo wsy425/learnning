@@ -330,3 +330,46 @@ def removeElement(self, nums: List[int], val: int) -> int:
         j += 1
     return i
 ```
+# 24. 两两交换链表中的节点
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+## python 同步赋值
+```python
+def swapPairs(self, head: ListNode) -> ListNode:
+    h = temp = ListNode(next = head)
+    if temp.next and temp.next.next:
+        temp.next.next.next , temp.next.next , temp.next , temp = temp.next , temp.next.next.next , temp.next.next ,  temp.next
+        #点2指向               点1指向          头指向       指针     点1              尾                   点2            点1
+    return h.next
+```
+## 正常赋值
+```python
+def swapPairs(self, head: ListNode) -> ListNode:
+    h = temp = ListNode(next = head)
+    if temp.next and temp.next.next:
+        node1 = temp.next
+        node2 = temp.next.next
+
+        temp.next = node2
+        node1.next = node2.next
+        node2.next = node1
+        temp =node1
+    return h.next
+```
+同步赋值所需的时间和内存都更小
+
+# 28. 实现 strStr()
+## python检索
+```python
+def strStr(self, haystack: str, needle: str) -> int:
+    return haystack.index(needle) if needle in haystack else -1
+```
+## 滑动窗口比较
+```python
+def strStr(self, haystack: str, needle: str) -> int:
+    L, n = len(needle), len(haystack)
+    for start in range(n - L + 1):
+        if haystack[start: start + L] == needle:
+            return start
+    return -1
+```

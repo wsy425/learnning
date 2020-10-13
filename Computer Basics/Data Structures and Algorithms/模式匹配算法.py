@@ -14,4 +14,5 @@ def Pattern_matching(str_1 , str_2):
             print(p)
             break
         p += 1
-Pattern_matching('abcd' , 'abcd')
+    return -1
+Pattern_matching('aaaaa' , 'bba')
