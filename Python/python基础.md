@@ -652,3 +652,7 @@ import car
 from module_name import *
 ```
 ### 在一个模块中导入另一个模块
+
+# 文件和异常
+## 读取文件数据
+### 读取整个文件

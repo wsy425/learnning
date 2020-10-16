@@ -330,6 +330,7 @@ def removeElement(self, nums: List[int], val: int) -> int:
         j += 1
     return i
 ```
+
 # 24. 两两交换链表中的节点
 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
@@ -372,4 +373,200 @@ def strStr(self, haystack: str, needle: str) -> int:
         if haystack[start: start + L] == needle:
             return start
     return -1
+```
+
+# 1002.查找常用字符
+给定仅有小写字母组成的字符串数组 A，返回列表中的每个字符串中都显示的全部字符（包括重复字符）组成的列表。例如，如果一个字符在每个字符串中出现 3 次，但不是 4 次，则需要在最终答案中包含该字符 3 次
+1. 哈希表，通过哈希表存储字符出现的次数
+2. 对哈希表取交集得到字符出现的最低次数
+3. 按最低次数输出字符
+```python
+def commonChars(self, A: List[str]) -> List[str]:
+    res = None
+    for a in A:
+        c = Count(a)
+        if res == None:
+            res = c
+        else:
+            res &= c
+    return list(res.elements())
+```
+1. Count()函数：一个数组内，遍历所有元素，将元素出现的次数记下来
+2. &：求交集
+3. .elements():
+
+# 35. 搜索插入位置
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+## 顺序查找
+```python
+def searchInsert(self, nums: List[int], target: int) -> int:
+    i = 0
+    if target > max(nums):
+        return len(nums)
+    else:
+        while i < len(nums):
+            if target <= nums[i]
+                return i
+            i += 1
+```
+## 二分法
+```python
+def searchInsert(self, nums: List[int], target: int) -> int:
+    left , right , ans = 0, len(nums)-1 , len(nums)
+    while left <=right:
+        middle = (right - left) // 2
+        if target <= nums[middle]:
+            ans = middle
+            right = middle -1
+        else:
+            left = middle +1
+    return ans
+```
+## python函数
+```python
+def searchInsert(self, nums: List[int], target: int) -> int:
+    nums.append(target)
+    nums.sort()
+    return nums.index(target)
+```
+list.sort()函数直接对整个函数进行排序
+
+# 116.填充每个节点的下一个右侧节点指针
+给定一个完美二叉树，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+初始状态下，所有 next 指针都被设置为 NULL
+## 指针法
+```python
+def connect(root):
+    if not root:
+        return None
+    head = root
+    while head:
+        cur = head
+        while cur and cur.left:
+            cur.left.next = cur.right
+            if cur.next:
+                cur.right.next = cur.next.left
+            cur = cur.next
+        head = head.left
+    return root
+```
+## 层次历遍
+```python
+def connect(self, root: 'Node') -> 'Node':
+    if not root:
+        return root
+    Q = collections.deque([root])
+    while Q:
+        for i in range(len(Q)):
+            node = Q.popleft()
+            if i < len(Q)-1:
+                node.next = Q[0]
+            if node.left:
+                Q.append(node.left)
+            if node.right:
+                Q.append(node.right)
+    return root
+```
+collections.deque:提供可以两边操作的列表
+
+# 38.外观数列
+给定一个正整数 n（1 ≤ n ≤ 30），输出外观数列的第 n 项。
+注意：整数序列中的每一项将表示为一个字符串。
+「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。
+```python
+def countAndSay(self, n: int) -> str:
+    i ,j ,c , str1 , str2= 0, 0, 1, '1', ''
+    while i < n-1:
+        while j < len(str1):
+            if j < len(str1)-1 and str1[j] == str1[j+1]:
+                c += 1
+            else:
+                str2 = str2 + str(c) + str(str1[j])
+                c = 1
+            j += 1
+        str1 = str2
+        str2 = ''
+        j = 0
+        i += 1
+    return str1
+```
+
+# 977. 有序数组的平方
+给定一个按非递减顺序排序的整数数组 A，返回每个数字的平方组成的新数组，要求也按非递减顺序排序。
+## python自带函数法
+```python
+def sortedSquares(A):
+    i = 0
+    while i < len(A):
+        A[i] = A[i] ** 2
+        i += 1
+    A.sort()
+    return A
+sortedSquares([-4,-1,0,3,10])
+```
+## 双指针法
+```python
+def sortedSquares(A):
+    i, j ,cur = 0, len(A)-1, len(A)-1
+    ans = [0] * len(A) 
+    while i <= j:
+        if abs(A[i]) > abs(A[j]):
+            ans[cur] = A[i] ** 2
+            i += 1
+        else:
+            ans[cur] = A[j] ** 2
+            j -= 1
+        cur -= 1
+    return ans
+```
+
+# 53. 最大子序和
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和
+## 暴力法
+```python
+def maxSubArray(nums):
+    temp = nums[0]
+    max_ =temp
+    for i in range(1,len(nums)):
+        if temp > 0 :
+            temp += nums[i]
+        else:
+            temp = nums[i]
+        max_ = max(max_ , temp)
+    return max_
+```
+## 递归
+```python
+def maxSubArray(nums):
+    n = len(nums)
+    if n == 1:
+        return nums[0]
+    else:
+        max_left = self.maxSubArray(nums[0:len(nums) // 2])
+        max_right = self.maxSubArray(nums[len(nums) // 2:len(nums)])
+    max_l = nums[len(nums) // 2 - 1]
+    tmp = 0
+    for i in range(len(nums) // 2 - 1, -1, -1):
+        tmp += nums[i]
+        max_l = max(tmp, max_l)
+    max_r = nums[len(nums) // 2]
+    tmp = 0
+    for i in range(len(nums) // 2, len(nums)):
+        tmp += nums[i]
+        max_r = max(tmp, max_r)
+    return max(max_right,max_left,max_l+max_r)
+```
+## 动态规划
+```python
+def maxSubArray(nums):
+    for i in range(1,len(nums)):
+        nums[i] = max(nums[i-1]+nums[i] , nums[i])
+    return mas(nums)
 ```
