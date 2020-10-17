@@ -656,3 +656,162 @@ from module_name import *
 # 文件和异常
 ## 读取文件数据
 ### 读取整个文件
+```python
+with open('pi.txt') as file_object:
+    contents = file_object.read()
+    print(contents)
+```
+1. open()函数：打开在当前文件同目录下的接收参数文件
+2. with关键字：在不再需要访问文件后将文件关闭，就可以不用调用close()，减少出现bug的可能性，python会自动帮你关闭
+3. .read()方法：读取文件的全部内容
+### 文件路径
+1. 相对路径
+`with open('text_files/filename.txt') as file_object`
+在当前文件所处文件夹下的text_files内的filename.txt处
+2. 绝对路径
+```python
+file_path = 'C:\\Users\\ehmatthes\\other_files\\text_files\\filename.txt'
+with open(file_path) as file_object
+```
+### 逐行读取
+```python
+filename = 'pi_digits.txt'
+with open(filename) as file_object:
+        for line in file_object:      print(line.rstrip())
+```
+### 创建包含文件各行内容的列表
+```python
+filename = 'pi_digits.txt'
+with open(filename) as file_object:
+    lines = file_object.readlines()#从文件中读取每一行形成一个列表
+    for line in lines:
+        print(line.rstrip())
+```
+## 写入文件
+### 写入空文件
+```python
+filename = 'programming.txt'
+with open(filename, 'w') as file_object:
+    file_object.write("I love programming
+```
+1. open()函数的两个常用实参：第一个为文件名称；第二个为文件打开方式，可指定为：
+    + 读取模式'r'
+    + 写入模式'w'
+    + 附加模式'a'
+    + 同时读取和写入'r+'
+2. 如果写入的文件不存在函数open()会自动创建
+3. 以写入打开，如果指定文件存在，python将在返回文件对象前清空该文件
+### 写入多行
+函数write()不会在你写入的文本末尾添加换行符
+```python
+filename = 'programming.txt'
+with open(filename, 'w') as file_object:  
+    file_object.write("I love programming.\n")
+    file_object.write("I love creating new games.\n)
+```
+### 附加到文件
+以附加模式打开文件，给文件添加内容但不覆盖原有内容；如果文件不存在自动创建一个空文件
+```python
+filename = 'programming.txt'
+with open(filename, 'a') as file_object:
+    file_object.write("I also love finding meaning in large datasets.\n")
+    file_object.write("I love creating apps that can run in a browser.\n)
+```
+## 异常
+python发生错误时会创建一个异常对象，如果编写了处理该异常的代码，程序将继续运行；若未对异常进行处理，程序将停止并显示一个traceback
+### try-except代码块
+```python
+try:
+    print(5/0)
+except ZeroDivisionError:
+    print("你不能拿0当除数！")
+```
+1. try后面的代码没问题将跳过except代码块
+2. try后面的代码有问题且报错与except后标注一致则运行except代码块
+### 使用异常避免崩溃
+```python
+print("Give me two numbers, and I'll divide them.")
+print("Enter 'q' to quit.")
+while True:
+    first_number = input("\nFirst number: ")
+    if first_number == 'q':
+        break
+    second_number = input("Second number: ")
+    try:
+        answer = int(first_number) / int(second_number)
+    except ZeroDivisionError:
+        print("You can't divide by 0!")
+    else:
+        print(answer)
+```
+### 不报错
+```python
+try:
+    print(5/0)
+except ZeroDivisionError:
+    pass
+```
+## 存储数据
+### json.dump()和json.load()
+```python
+import json
+numbers = [2, 3, 5, 7, 11, 13]
+filename = 'numbers.json'
+with open(filename, 'w') as f_obj:
+    json.dump(numbers, f_obj)#将numbers存储到f_obj文件中
+```
+```python
+import json
+filename = 'numbers.json'
+with open(filename) as f_obj:
+    numbers = json.load(f_obj)#读取json文件
+    print(numbers)
+```
+### 保存和读取用户生成的数据
+```python
+import json
+# 如果以前存储了用户名，就加载它
+#否则，就提示用户输入用户名并存储它
+filename = 'username.json'
+try:
+    with open(filename) as f_obj:
+        username = json.load(f_obj)
+except FileNotFoundError:
+    username = input("What is your name? ")
+    with open(filename, 'w') as f_obj:
+        json.dump(username, f_obj)
+        print("We'll remember you when you come back, " + username + "!")
+else:
+    print("Welcome back, " + username + "!")
+```
+### 重构
+```python
+import json
+def get_stored_username():
+    """如果存储了用户名，就获取它"""
+    filename = 'username.json'
+    try:
+        with open(filename) as f_obj:
+            username = json.load(f_obj)
+    except FileNotFoundError:
+        return None
+    else:
+        return username
+def get_new_username():
+    """提示用户输入用户名"""
+    username = input("What is your name? ")
+    filename = 'username.json'
+    with open(filename, 'w') as f_obj:
+        json.dump(username, f_obj)
+        return username
+def greet_user():
+    """问候用户，并指出其名字"""
+    username = get_stored_username()
+    if username:
+        print("Welcome back, " + username + "!")
+    else:
+        username = get_new_username()
+        print("We'll remember you when you come back, " + username + "!")
+
+greet_user()
+```

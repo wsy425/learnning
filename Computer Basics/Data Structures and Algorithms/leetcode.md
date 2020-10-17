@@ -509,7 +509,6 @@ def sortedSquares(A):
         i += 1
     A.sort()
     return A
-sortedSquares([-4,-1,0,3,10])
 ```
 ## 双指针法
 ```python
@@ -570,3 +569,88 @@ def maxSubArray(nums):
         nums[i] = max(nums[i-1]+nums[i] , nums[i])
     return mas(nums)
 ```
+
+# N皇后 II
+n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+给定一个整数 n，返回 n 皇后不同的解决方案的数量。
+## 集合判断递归
+```python
+def totalNQueens(n):
+    def backtrack(row: int) -> int:
+        if row == n:
+            return 1
+        else:
+            count = 0
+            for i in range(n):
+                if i in columns or row - i in diagonal1 or row + i in diagonal2:
+                    continue
+                columns.add(i)
+                diagonal1.add(row - i)
+                diagonal2.add(row + i)
+                count += backtrack(row + 1)
+                columns.remove(i)
+                diagonal1.remove(row - i)
+                diagonal2.remove(row + i)
+            return count
+                    
+    columns = set()
+    diagonal1 = set()
+    diagonal2 = set()
+    return backtrack(0)
+```
+## 位运算判断递归
+```python
+def totalNQueens(n):
+    res=0
+    def backtrack(i,col,pos,neg):
+        nonlocal res
+        if i==n:
+            res+=1
+            return 
+        #其中1表示可以被选
+        pre=((1<<n)-1)&(~(col | pos | neg))
+          
+        while pre:
+            cur=pre & (-pre)
+            backtrack(i+1,col | cur , (pos | cur)>>1,(neg | cur)<<1)
+            pre &=pre-1
+            
+    backtrack(0,0,0,0)
+    return res
+```
+| 位或运算
+& 位与运算
+x & (−x) 可以获得 x 的二进制表示中的最低位的 1 的位置；
+x&(x-1)可以将 x 的二进制表示中的最低位的 1 置成 0。
+
+# 58. 最后一个单词的长度
+## split函数
+```python
+def lengthOfLastWord(s):
+    s = s.rstrip()
+    s = s[::-1]
+    a = s.split(' ',1)
+    p = a[0]
+    return len(a[0])
+```
+要注意空字符串和空格在最后出现的情况
+.rstrip()删除字符串末尾空格
+.split(' ',1)以逗号前的字符从头分割字符串逗号后次数
+## 反向历遍
+```python
+def lengthOfLastWord(s):
+    i = len(s) - 1
+    j = 0
+    flag = False
+    while i >= 0:
+        if s[i] != ' ':
+            flag = True
+            j += 1
+            i -= 1
+            continue 
+        elif flag:
+            break
+        i -= 1                     
+    return j
+```
+要判断两次空格，通过flag指标与continue、break的配合实现算法

@@ -190,3 +190,20 @@ reflog = reference log
 查看引用日志
 第一列表示commit id；第二列表示分支；第三列表示相对位置，相对于现在HEAD指针的位置；最后一列记录HEAD指针移动情况
 可以通过这个方式查找git log无法查找在现在HEAD指针之后提交过的commit id，然后checkout指针恢复
+
+# 区间选择
+## 双点
+`git log master..experiment`
+筛选出在experiment当中但是不在master当中的提交
+### 常用
+`git log origin/master..HEAD`
+比较的是当前节点以及远程push的分支之间的差别
+## 三点
+`git log master...experiment`
+展示这两个分支各自独有的提交
+`git log --left-right master...experiment`
+用箭头表明这些提交分别被哪个分支独有
+## 多点
+`git log A B ^C`
+`git log A B --not C`
+查看在A或和B当中，但是不在C当中的提交
