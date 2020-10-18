@@ -654,3 +654,41 @@ def lengthOfLastWord(s):
     return j
 ```
 要判断两次空格，通过flag指标与continue、break的配合实现算法
+
+# 19.删除链表的倒数第N个节点
+给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+```python
+def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+    r = ListNode(0)
+    r.next = head
+    slownode = r
+    fastnode = slownode
+    for i in range(n):
+        fastnode = fastnode.next
+    while fastnode != None and fastnode.next!=None:
+        slownode = slownode.next
+        fastnode = fastnode.next
+    slownode.next = slownode.next.next
+    return r.next
+```
+1. 双指针：使快指针比慢指针快n，快指针触底时表示慢指针后一项删除
+2. 创建空头链表，在空头链表上创建快慢指针，防止原链表第一个元素时删除出错
+3. 考虑删除原链表第一个元素时，快指针已经超出链表范围，要对循环做更多限制
+
+# 66.加一
+给定一个由整数组成的非空数组所表示的非负整数，在该数的基础上加一。
+最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+你可以假设除了整数 0 之外，这个整数不会以零开头。
+```python
+def plusOne(digits):
+    j = 0
+    for i in range(1,len(digits)+1):
+        if digits[-i] != 9:
+            digits[-i] += 1 
+            break
+        digits[-i] = 0
+        j += 1
+    if j == len(digits):
+        digits.insert(0, 1)
+    return digits
+```

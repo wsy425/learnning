@@ -815,3 +815,57 @@ def greet_user():
 
 greet_user()
 ```
+
+# 测试代码
+## 测试函数
+```python
+import unittest
+from name_function import get_formatted_name
+class NamesTestCase(unittest.TestCase):
+    """测试name_function.py"""
+    def test_first_last_name(self):
+        """能够正确地处理像Janis Joplin这样的姓名吗？"""
+        formatted_name = get_formatted_name('janis', 'joplin')
+        self.assertEqual(formatted_name, 'Janis Joplin')
+unittest.main()
+```
+1. 首先导入模块unittest和要测试的函数get_formatted_name
+2. 创建一个类，用于包含一系列针对get_formatted_name()的单元测试，这个类必须继承unittest.TestCase类
+3. assertEqual()断言方法：核实结果是否与期望的结果一致
+## 断言方法
+| 序号 | 断言方法 | 断言描述 |
+| :----: | ----: | :----: |
+| 1 | assertEqual(a, b, msg=None) | 验证a = b |
+| 2 | assertNotEqual(a, b, msg=None) | 验证a != b |
+| 3 | assertTrue(x, msg=None) | 验证x是true|
+| 4 | assertFalse(x, msg=None) | 验证x是false|
+| 5 | assertIsInstance(obj, cls, msg=None) | 验证obj是cls的实例|
+| 6 | assertIn(arg1, arg2, msg=None) | 验证arg1是arg2的子串|
+## 测试类
+```python
+import unittest
+from survey import AnonymousSurvey
+class TestAnonmyousSurvey(unittest.TestCase):
+    """针对AnonymousSurvey类的测试"""
+    def setUp(self):
+        """创建一个调查对象和一组答案，供使用的测试方法使用"""
+        question = "What language did you first learn to speak?"
+        self.my_survey = AnonymousSurvey(question)
+        self.responses = ['English', 'Spanish', 'Mandarin']
+    
+    def test_store_single_response(self):
+         """测试单个答案会被妥善地存储"""
+        question = "What language did you first learn to speak?"
+        self.my_survey.store_response(self.responses[0])
+        self.assertIn(self.responses[0], self.my_survey.responses)
+
+    def test_store_three_responses(self):
+        """测试三个答案会被妥善地存储"""
+        for response in self.responses:
+            self.my_survey.store_response(response)
+        for response in self.responses:
+            self.assertIn(response, self.my_survey.responses)
+
+unittest.main()
+```
+1. 应用setUp()使测试中只用实例化一次类
