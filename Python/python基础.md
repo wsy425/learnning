@@ -156,14 +156,19 @@ print(bicycles)
 ## 元组
 不可变的列表
 ### 定义元组
-用()而不是[]
+1. 用()而不是[]
 ```python
 dimensions = (200,50)
+```
+2. 一个元素的元组必须加","，因为小括号有优先级问题
+```python
+dimensions = (200,)
 ```
 ### 遍历元组
 和列表一样
 ### 修改元组变量
-重新定义，不能单独修改一个值
+1. 重新定义，不能单独修改一个值
+2. 元组本身不能改变，但元组内可变元素（列表等）是可以改变的
 
 # if
 ## 条件测试
@@ -197,9 +202,15 @@ alien_0 = {'color':'green'}
 ```
 'color'是键，与之相关的值是'green'
 ### 访问字典
+1. 检索方式，查找不到key会报错
 ```python
 alien_0 = {'color':'green'}
 print（alien_0['color']） 
+```
+2. get方式查找不到会返回None
+```python
+alien_0 = {'color':'green'}
+print（alien_0.get('color')） 
 ```
 ### 创建字典
 ```python

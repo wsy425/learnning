@@ -207,3 +207,34 @@ reflog = reference log
 `git log A B ^C`
 `git log A B --not C`
 查看在A或和B当中，但是不在C当中的提交
+
+# 交互式工具
+`git add -i`
+会出现八个选项：
+1. status
+2. update
+3. revert
+4. add
+5. patch
+6. diff
+7. quit
+8. help
+## 交互式暂存
+1. 在`git add -i`后选择4（add）
+2. 选择代表需要添加文件的序号
+3. 选择过后该序号前会出现*
+4. 敲击回车会返回上层菜单
+5. 选择7退出后git状态会随之改变
+## 查看改动
+1. 在`git add- i`后选择6（diff）
+2. 选择代表要看改动文件的序号
+3. 等效于`git diff --cached`
+## 取消暂存
+1. 在`git add -i`后选择3（revert）
+2. 选择代表向撤销暂存文件的序号
+## 暂存补丁
+可以通过这个功能把文件一部分添加进git，另一部分改动先保留在本地
+1. 在`git add -i`后选择5（patch）
+2. 选择代表需要补丁暂存文件的序号
+3. git会把改动一个部分一个部分地询问
+4. 输入y则表示加入git暂存；n表示不加入

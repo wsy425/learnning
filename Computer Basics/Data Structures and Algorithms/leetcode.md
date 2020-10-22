@@ -209,7 +209,7 @@ def canPartition(self, nums: List[int]) -> bool:
             return True
         if i>=n or current>target:
             return False
-        return t(current+nums[i] , i+1) or t(current,i+1)
+        return t(current+nums[i] , i+1) or t(current , i+1)
     return dfs(0,0)
 ```
 ## 动态规划法
@@ -691,4 +691,237 @@ def plusOne(digits):
     if j == len(digits):
         digits.insert(0, 1)
     return digits
+```
+
+# 844. 比较含退格的字符串
+给定 S 和 T 两个字符串，当它们分别被输入到空白的文本编辑器后，判断二者是否相等，并返回结果。 # 代表退格字符。
+注意：如果对空文本输入退格字符，文本继续为空。
+```python
+def backspaceCompare(S, T):
+    i , j = len(S)-1 , len(T)-1
+    count_i , count_j = 0 , 0
+    while i>=0 or j>=0:
+        if S[i] == '#'and i >=0:
+            count_i += 1
+            i -= 1
+            continue
+        if T[j] == '#' and j >=0:
+            count_j += 1
+            j -= 1
+            continue
+        elif count_i >0:
+            i -= 1
+            count_i -= 1
+            continue
+        elif count_j >0:
+            j -= 1
+            count_j -= 1
+            continue
+        elif  i<0 or j <0 or S[i] != T[j]:
+            return False
+        else:
+            i -= 1
+            j -= 1
+    return i <0 and j <0
+```
+1. 双指针遍历两个字符串
+2. 倒序遍历删除#前的字符
+3. 不存在#删#的事件，所以计数不能直接减
+4. 会出现字符串里只剩#的问题，且要与字符串可倒序检索一起考虑
+
+# 67. 二进制求和
+## python函数
+```python
+def addBinary(self, a: str, b: str) -> str:
+    a = int(a,2)
+    b = int(b,2)
+    c = a + b
+    return bin(c)[2:]
+```
+1. int():将括号里内容转换为一个整数
+2. int(x,2/8/16):x为字符串，将2/8/16进制的字符串转化为10进制整数
+3. bin(x):返回10进制x的2进制表达字符串，且前面带进制标识
+4. python进制转换
+![python进制转换.png](https://img-blog.csdn.net/20160720140605151)
+## 补位后位运算
+```python
+def addBinary(a,b):
+    a = a.zfill(max(len(a),len(b)))
+    b = b.zfill(max(len(a) ,len(b)))
+    count = 0
+    c = ''
+    for i in range(len(a)-1,-1,-1):
+        if a[i] == '0' and b[i] == '0':
+            c = str(count) + c
+            count = 0
+        elif a[i] == '0' or b[i] == '0':
+            c = str(1^count) + c
+            count = 1 & count
+        else:
+            c = c + str(count)
+            count = 1
+    if count == 1:
+        c = '1' + c
+    return c
+```
+1. .zfill (width)将字符串在左边补0达到width长度
+2. 影响二进制计算的只有进的位和两个数该位本身，三者只可能是0、1，考虑位运算
+
+# 143.重排链表
+给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
+将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+## 将链表存储到列表中
+列表具有索引的功能，借助这一功能达到链表的索引
+```python
+def reorderList(self, head: ListNode) -> None:
+    if not head:
+        return
+    node = head
+    head_list = []
+    while node:
+        head_list.append(node)
+        node = node.next
+    i , j = 0 , len(head_list) - 1
+    while i < j:
+        head_list[i].next = head_list[j]
+        head_list[j].next = head_list[i+1]
+        i += 1
+        j -= 1
+    head_list[i].next = None
+```
+## 快慢指针找中点，右侧链表翻转后合并
+```python
+def reorderList(self, head: ListNode) -> None:
+    if not head:
+        return
+    slow = fast = head
+    left = head
+    prv = None
+    # 快慢指针找中点
+    while fast.next and fast.next.next:
+        slow = slow.next
+        fast = fast.next.next
+    # 分割成两个链表
+    right = slow.next
+    slow.next = None
+    # 右侧链表翻转
+    while right:
+        right.next , right , prv = prv , right.next , right
+    # 两链表合并
+    while prv and left:
+        left.next , prv.next , left , prv = prv , left.next , left.next , prv.next
+```
+1. 快慢指针找中点：边界条件中右侧可以从中位之后开始
+2. 一定要分割成两个链表，否则成环
+3. 链表翻转类似于栈
+
+# 69. x 的平方根
+实现 int sqrt(int x) 函数。
+计算并返回 x 的平方根，其中 x 是非负整数。
+由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+```python
+def mySqrt(self, x: int) -> int:
+    if x <= 1:
+        return x
+    a = x
+    while  a > x/a:
+        a = (a + x/a) // 2
+    return int(a)
+```
+1. 牛顿迭代法
+2. 保持每次a都为整数，会使得收敛速度变快
+
+# 925. 长按键入
+你的朋友正在使用键盘输入他的名字 name。偶尔，在键入字符 c 时，按键可能会被长按，而字符可能被输入 1 次或多次。
+你将会检查键盘输入的字符 typed。如果它对应的可能是你的朋友的名字（其中一些字符可能被长按），那么就返回 True。
+```python
+def isLongPressedName(name,typed):
+    i ,j = 0 , 0
+    while i < len(name) and j <len(typed):
+        if name[i] != typed[j] and j > 0:
+            if typed[j] == typed[j-1]:
+                j += 1
+            else:
+                return False
+        elif name[i] != typed[j]:
+            return False
+        else:
+            i += 1
+            j += 1
+    return i = len(name) and len(set(typed[j-1:])) == 1
+```
+1. 双指针
+2. 边界条件考虑
+
+# 70. 爬楼梯
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+注意：给定 n 是一个正整数。
+```python
+def climbStairs(n)
+    a = 0
+    b = 1
+    for i in range(n):
+        a , b = b , b+a
+    return b
+```
+就是求斐波那契数列
+
+# 763. 划分字母区间
+字符串 S 由小写字母组成。我们要把这个字符串划分为尽可能多的片段，同一个字母只会出现在其中的一个片段。返回一个表示每个字符串片段的长度的列表。
+## python函数
+```python
+def partitionLabels(S):
+    i , j = 0 , 0
+    list_1 = []
+    while i <len(S):
+        per = S[i]
+        z = 0
+        while z < len(per):
+            if per[z] in S[i+1:]:
+                i =max(i , len(S) - S[::-1].index(per[z]) -1)
+                per = ''.join(set(S[j:i]))
+            else:
+                z += 1
+        i += 1
+        list_1.append(i-j)
+        j = i
+    return list_1
+```
+## 哈希表
+```python
+def partitionLabels(S):
+    char_pos ={}
+    for i in range(len(S)):
+        char_pos[S[i]] = i
+    i , j = 0 , 0
+    list_1 = []
+    while i < len(S):
+        per = S[i]
+        z = 0
+        while z < len(per):
+            if per[z] in S[i+1:]:
+                i = max(char_pos[per[z]] , i)
+                per = ''.join(set(S[j:i]))
+            else:
+                z += 1
+        i += 1
+        list_1.append(i-j)
+        j = i
+    return list_1
+```
+
+# 83. 删除排序链表中的重复元素
+给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+```python
+def deleteDuplicates(head: ListNode):
+    slow = head
+    fast = head
+    while fast:
+        if slow.val != fast.val:
+            slow = slow.next
+        fast = fast.next
+        slow.next = fast
+    return head
 ```

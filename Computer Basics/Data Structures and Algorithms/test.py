@@ -1,12 +1,17 @@
-def plusOne(digits):
-    j = 0
-    for i in range(1,len(digits)+1):
-        if digits[-i] != 9:
-            digits[-i] += 1 
-            break
-        digits[-i] = 0
-        j += 1
-    if j == len(digits):
-        digits.insert(0, 1)
-    return digits
-plusOne([1,9,9])
+def partitionLabels(S):
+    i , j = 0 , 0
+    list_1 = []
+    while i <len(S):
+        per = S[i]
+        z = 0
+        while z < len(per):
+            if per[z] in S[i+1:]:
+                i =max(i , len(S) - S[::-1].index(per[z]) -1)
+                per = ''.join(set(S[j:i]))
+            else:
+                z += 1
+        i += 1
+        list_1.append(i-j)
+        j = i
+    return list_1
+partitionLabels("mlullbhiuiujgvwvurcdvhzdk")
