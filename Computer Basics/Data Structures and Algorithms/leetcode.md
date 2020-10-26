@@ -1,5 +1,5 @@
 # 1.两数之和
-给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标
+给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那两个整数，并返回他们的数组下标
 ```python
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -924,4 +924,256 @@ def deleteDuplicates(head: ListNode):
         fast = fast.next
         slow.next = fast
     return head
+```
+
+# 234. 回文链表
+请判断一个链表是否为回文链表
+## 转换成列表
+```python
+def isPalindrome(head):
+    head_list = []
+    node = head
+    if  not head:
+        return True
+    while node:
+        head_list.append(node.val)
+        node = node.next
+    i , j = 0, len(head_list) - 1
+    while i<j:
+        if head_list[i] != head_list[j]:
+            return False
+        i += 1
+        j -= 1
+    return True
+```
+## 快慢指针找中点同时对左边链表反转
+```python
+def isPalindrome(head):
+    slow = head
+    fast = head
+    pre = None
+    count = 0
+    if not head or not fast.next:
+        return True
+    while fast and fast.next:
+        fast = fast.next.next
+        temp = slow.next
+        slow.next = pre
+        pre = slow
+        slow = temp
+    if fast:
+        slow =slow.next
+    while pre:
+        if pre.val != slow.val:
+            return False
+        pre = pre.next
+        slow = slow.next
+    return True
+```
+
+# 88. 合并两个有序数组
+给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组
+## python函数
+```python
+def merge(nums1,m, nums2, n):
+    nums1[m:] = nums2
+    nums1.sort()
+```
+## 倒序输入
+```python
+def merge(nums1, m, nums2, n):
+    i = m+n-1
+    a , b = m-1 , n-1 
+    while i>=0:
+        if a>=0 and b>=0 and nums1[a] > nums2[b]:
+            nums1[i] = nums1[a]
+            a -= 1
+        elif a>=0 and b>=0:
+            nums1[i] = nums2[b]
+            b -= 1
+        elif b>=0:
+            nums1[i] = nums2[b]
+            b -= 1
+        i -= 1
+```
+
+# 1024. 视频拼接
+你将会获得一系列视频片段，这些片段来自于一项持续时长为 T 秒的体育赛事。这些片段可能有所重叠，也可能长度不一。
+视频片段 clips[i] 都用区间进行表示：开始于 clips[i][0] 并于 clips[i][1] 结束。我们甚至可以对这些片段自由地再剪辑，例如片段 [0, 7] 可以剪切成 [0, 1] + [1, 3] + [3, 7] 三部分。
+我们需要将这些片段进行再剪辑，并将剪辑后的内容拼接成覆盖整个运动过程的片段（[0, T]）。返回所需片段的最小数目，如果无法完成该任务，则返回 -1 。
+## 贪心算法
+```python
+def videoStitching(clips, T):
+    i, j, lastend , maxlength = 0 , 0 , 0 , 0
+    count = 0
+    clips = sorted(clips,key = lambda x:x[0])
+    while i<len(clips):
+        if lastend >= T:
+            break
+        while j<len(clips) and clips[j][0] <=lastend:
+            maxlength = max(maxlength , clips[j][1])
+            j += 1
+        if i == j:
+            return -1
+        lastend = maxlength
+        i = j
+        count += 1
+    return -1 if lastend<T else count
+```
+1. sorted(key = lambda x:x[ a])按照第a个数排列顺序
+## 动态规划
+```python
+def videoStitching(clips, T):
+    dp = [0] + [float("inf")] * T
+    for i in range(1, T + 1):
+        for aj, bj in clips:
+            if aj < i <= bj:
+                dp[i] = min(dp[i], dp[aj] + 1)
+    return -1 if dp[T] == float("inf") else dp[T]
+```
+1. 用的dp[ i]存储到i需要的最少视频段
+
+# 相同的树
+给定两个二叉树，编写一个函数来检验它们是否相同。
+如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+## 深度优先算法
+```python
+def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+    if not p and not q:
+        return True
+    elif not p or not q:
+        return False
+    elif p.val != q.val:
+        return False
+    else:
+        return self.isSameTree(p.right,q.right) and self.isSameTree(p.left,q.left)
+```
+1. 递归思想
+## 广度优先算法
+```python
+def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+    if p is None and q is None: return True
+    elif p is None and q is not None: return False
+    elif p is not None and q is None: return False
+    elif p.val != q.val: return False
+    stack1, stack2 = [p], [q]
+    while stack1:
+        this_lv1, this_lv2= [], []
+        for idx in range(len(stack1)):
+            n1,n2 = stack1[idx], stack2[idx]
+            if n1 is None and n2 is not None: return False
+            elif n1 is not None and n2 is None: return False
+            elif n1 is not None and n2 is not None and n1.val != n2.val: return False
+            if n1 is not None: this_lv1.extend([n1.left, n1.right])
+            if n2 is not None: this_lv2.extend([n2.left, n2.right])
+        stack1, stack2 = this_lv1, this_lv2        
+    return True
+```
+1. 不使用栈pop可以保证把整个列表遍历完
+
+# 845. 数组中的最长山脉
+我们把数组 A 中符合下列属性的任意连续子数组 B 称为 “山脉”：
+B.length >= 3
+存在 0 < i < B.length - 1 使得 B[ 0] < B[ 1] < ... B[ i-1] < B[ i] > B[ i+1] > ... > B[B.length - 1]
+（注意：B 可以是 A 的任意子数组，包括整个数组 A。）
+给出一个整数数组 A，返回最长 “山脉” 的长度。
+如果不含有 “山脉” 则返回 0
+```python
+def longestMountain(A):
+    i , right ,left ,count=0,0,0,0
+    while i <len(A) -1:
+        if A[i] < A[i+1]:
+            if right != 0:
+                left = 0
+                right = 0
+            left += 1
+        elif left != 0 and A[i] > A[i+1]:
+            right += 1
+            count = max(count,left+right+1)
+        elif A[i] == A[i+1]:
+            left = 0
+        i += 1
+    return count
+```
+
+# 101. 对称二叉树
+给定一个二叉树，检查它是否是镜像对称的。
+```python
+def isSymmetric(self, root: TreeNode) -> bool:
+    if not root:
+        return True
+    def is_mirror(l,r):
+        if not(l or r):
+            return True
+        if not(l and r):
+            return False
+        if l.val != r.val:
+            return False
+        return is_mirror(l.left,r.right) and is_mirror(l.right,r.left)
+    return is_mirror(root.left,root.right)
+```
+1. 递归
+
+# 1365. 有多少小于当前数字的数字
+给你一个数组 nums，对于其中每个元素 nums[i]，请你统计数组中比它小的所有数字的数目。
+换而言之，对于每个 nums[i] 你必须计算出有效的 j 的数量，其中 j 满足 j != i 且 nums[j] < nums[i] 。
+以数组形式返回答案
+## python函数
+```python
+def smallerNumbersThanCurrent(nums):
+    num1 = sorted(nums)
+    count = []
+    for num in nums:
+        count.append(num1.index(num))
+    return count
+```
+## 类哈希表
+```python
+def smallerNumbersThanCurrent(nums):
+    place = [0]* (max(nums)+1)
+    out = []
+    for num in nums:
+        place[num] += 1
+    for i in range(1,len(place)):
+        place[i] += place[i-1]
+        i += 1
+    for num in nums:
+        if num ==0:
+            out.append(0)
+        else:
+            out.append(place[num-1])
+    return out
+```
+1. 考虑0的情况
+2. 考虑同一个数反复出现的情况
+
+# 104.  
+给定一个二叉树，找出其最大深度。
+二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+说明: 叶子节点是指没有子节点的节点。
+## 递归
+```python
+def maxDepth(self, root: TreeNode) -> int:
+    if not root:
+        return 0
+    else:
+        return max(self.maxDepth(root.left),self.maxDepth(root.right))+1
+```
+## 广度优先算法
+```python
+def maxDepth(self, root: TreeNode) -> int:
+    if not root:
+        return 0
+    q = deque([root])
+    level = 0
+    while q:
+        n = len(q)
+        for i in range(n):
+            node = q.popleft()
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        level += 1
+    return level
 ```

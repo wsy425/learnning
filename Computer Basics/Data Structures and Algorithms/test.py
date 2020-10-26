@@ -1,17 +1,12 @@
-def partitionLabels(S):
-    i , j = 0 , 0
-    list_1 = []
-    while i <len(S):
-        per = S[i]
-        z = 0
-        while z < len(per):
-            if per[z] in S[i+1:]:
-                i =max(i , len(S) - S[::-1].index(per[z]) -1)
-                per = ''.join(set(S[j:i]))
-            else:
-                z += 1
+def smallerNumbersThanCurrent(nums):
+    place = [0]* (max(nums)+1)
+    out = []
+    for num in nums:
+        place[num] += 1
+    for i in range(1,len(place)):
+        place[i] += place[i-1]
         i += 1
-        list_1.append(i-j)
-        j = i
-    return list_1
-partitionLabels("mlullbhiuiujgvwvurcdvhzdk")
+    for num in nums:
+        out.append(place[num-1])
+    return out
+smallerNumbersThanCurrent([5,0,10,0,10,6])

@@ -238,3 +238,23 @@ reflog = reference log
 2. 选择代表需要补丁暂存文件的序号
 3. git会把改动一个部分一个部分地询问
 4. 输入y则表示加入git暂存；n表示不加入
+
+# stash储藏
+将改动的内容储藏起来避免checkout的时候出现问题被覆盖，也避免其被commit并push
+## 储藏
+1. `git stash`
+把我们本地所有没有commit的内容都暂存了起来，这样方便我们进行checkout或者是其他一些操作，而不会起冲突或者是其他的影响
+2. `git stash --keep-index`
+只暂存没有add到暂存区的内容
+3. `git stash -u`
+stash的时候将新创建并且还没有被git管理的文件也一并储藏起来
+## 还原
+1. `git stash apply`
+记录仍将保留
+可以选择应用的记录
+`git stash apply stash@{2}`
+2. `git stash pop`
+应用后记录会被删除
+只能还原栈顶的记录
+3. `git stash apply --index`
+暂存文件的复原

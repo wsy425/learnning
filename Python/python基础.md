@@ -86,12 +86,11 @@ bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
 bicycles.sort() #字母顺序
 bicycles.sort(reverse=True) #字母反顺序
 ```
-### .sorted()
+### sorted()
 临时性按照字母顺序排序
 ```python
 bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-bicycles.sorted() #字母顺序
-bicycles.sorted(reverse=True) #字母反顺序
+sorted(bicycles) #字母顺序
 ```
 ### .reverse()
 永久性反转列表
