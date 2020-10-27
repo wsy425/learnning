@@ -1177,3 +1177,58 @@ def maxDepth(self, root: TreeNode) -> int:
         level += 1
     return level
 ```
+
+# 144. 二叉树的前序遍历
+给定一个二叉树，返回它的前序遍历。
+## 递归
+```python
+def preorderTraversal(self, root: TreeNode) -> List[int]:
+    res = []
+    def preoder(root):
+        if not root:
+            return res
+        res.append(root.val)
+        preoder(root.left)
+        preoder(root.right)
+    return res 
+```
+## 迭代
+```python
+def preorderTraversal(self, root: TreeNode) -> List[int]:
+    res = []
+    stack = []
+    if not root:
+        return res
+    node = root
+    while node or stack:
+        while node:
+            res.append(node.val)
+            stack.append(node)
+            node = node.left
+        node = stack.pop()
+        node = node.right
+    return res
+```
+
+# 107. 二叉树的层次遍历 II
+给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+```python
+def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+    q = deque([root])
+    p = []
+    res = []
+    if not root:
+        return res
+    while q:
+        n = len(q)
+        for i in range(n):
+            node = q.popleft()
+            p.append(node.val)
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        res.insert(0,p)
+        p = []
+    return res
+```
