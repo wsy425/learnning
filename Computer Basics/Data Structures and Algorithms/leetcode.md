@@ -1232,3 +1232,216 @@ def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
         p = []
     return res
 ```
+
+# 1207. 独一无二的出现次数
+给你一个整数数组 arr，请你帮忙统计数组中每个数的出现次数。
+如果每个数的出现次数都是独一无二的，就返回 true；否则返回 false。
+```python
+def uniqueOccurrences(arr):
+    dic = {}
+    s = []
+    for num in arr:
+        if num not in dic:
+            dic[num] = 1
+        else:
+            dic[num] += 1
+    for i in dic:
+        s.append(dic[i])
+    return len(s) == len((set(s)))
+```
+
+# 108. 将有序数组转换为二叉搜索树
+将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+```python
+def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+    def BST(left,right):
+        if left>right:
+            return None
+        mid = (left+right) // 2
+        root = TreeNode(nums[mid])
+        root.left = BST(left,mid-1)
+        root.right = BST(mid+1,right)
+        return root
+    return BST(0,len(nums)-1)
+```
+
+# 129. 求根到叶子节点数字之和
+给定一个二叉树，它的每个结点都存放一个 0-9 的数字，每条从根到叶子节点的路径都代表一个数字。
+例如，从根到叶子节点路径 1->2->3 代表数字 123。
+计算从根到叶子节点生成的所有数字之和。
+说明: 叶子节点是指没有子节点的节点。
+## 广度优先算法
+```python
+def sumNumbers(self, root: TreeNode) -> int:
+    if not root:
+        return 0
+    total = 0
+    nodeQueue = collections.deque([root])
+    numQueue = collections.deque([root.val])
+    while nodeQueue:
+        node = nodeQueue.popleft()
+        num = numQueue.popleft()
+        left, right = node.left, node.right
+        if not left and not right:
+            total += num
+        else:
+            if left:
+                nodeQueue.append(left)
+                numQueue.append(num * 10 + left.val)
+            if right:
+                nodeQueue.append(right)
+                numQueue.append(num * 10 + right.val)
+    return total
+```
+## 深度优先算法
+```python
+def sumNumbers(self, root: TreeNode) -> int:
+    def dsf(root,pretotal):
+        if not root:
+            return 0
+        total = pretotal * 10 + root.val
+        if not root.left and not root.right:
+            return total
+        else:
+            return dsf(root.left,total) + dsf(root.right,total)
+    return dsf(root,0)
+```
+
+# 463. 岛屿的周长
+给定一个包含 0 和 1 的二维网格地图，其中 1 表示陆地 0 表示水域。
+网格中的格子水平和垂直方向相连（对角线方向不相连）。整个网格被水完全包围，但其中恰好有一个岛屿（或者说，一个或多个表示陆地的格子相连组成的岛屿）。
+岛屿中没有“湖”（“湖” 指水域在岛屿内部且不和岛屿周围的水相连）。格子是边长为 1 的正方形。网格为长方形，且宽度和高度均不超过 100 。计算这个岛屿的周长。
+```python
+def islandPerimeter(grid):
+    count = 0
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == 1:
+                if i == 0 or grid[i-1][j]==0:
+                    count += 1
+                if  i == len(grid)-1 or grid[i+1][j]==0:
+                    count += 1
+                if j == 0 or grid[i][j-1]==0:
+                    count += 1
+                if j == len(grid[0])-1 or grid[i][j+1]==0:
+                    count += 1
+    return count
+```
+1. 周长加不加通过周围4个格子判定
+2. 判断语句要把能通过的放在前面
+
+# 381. O(1) 时间插入、删除和获取随机元素 - 允许重复
+设计一个支持在平均 时间复杂度 O(1) 下， 执行以下操作的数据结构。
+注意: 允许出现重复元素。
+insert(val)：向集合中插入元素 val。
+remove(val)：当 val 存在时，从集合中移除一个 val。
+getRandom：从现有集合中随机获取一个元素。每个元素被返回的概率应该与其在集合中的数量呈线性相关。
+```python
+import random
+class RandomizedCollection:
+    def __init__(self):
+       '''类存储定义'''
+        self.nums = []
+        self.num_loc = defaultdict(set)
+        self._len = 0
+
+    def insert(self, val: int) -> bool:
+        """插入元素"""
+        self.nums.append(val)
+        self.num_loc[val].add(self._len)
+        self._len += 1
+        return len(self.num_loc[val]) == 1
+
+    def remove(self, val: int) -> bool:
+        """移除元素"""
+        if not self.num_loc[val]:
+            return False
+        val_loc = self.num_loc[val].pop()
+        self.nums[val_loc] = self.nums[-1]
+        last_val = self.nums.pop()
+        self.num_loc[last_val].add(val_loc)
+        self.num_loc[last_val].discard(self._len-1)
+        self._len -= 1
+        return True
+
+    def getRandom(self) -> int:
+        """随机获取元素"""
+        return random.choice(self.nums)
+```
+1. 集合set的内置函数add，discard
+2. 列表与代替哈希表的字典混合运用
+3. O(1)时间删除元素的关键在于用最后一个元素覆盖该元素，然后把最后一个元素删除
+
+# 140. 单词拆分 II
+给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，在字符串中增加空格来构建一个句子，使得句子中所有的单词都在词典中。返回所有这些可能的句子。
+说明：
+分隔时可以重复使用字典中的单词。
+你可以假设字典中没有重复的单词
+```python
+def wordBreak(s,wordDict):
+    res = []
+    memo = [1] * (len(s)+1)
+    wordDict = set(wordDict)
+
+    def dfs(wordDict,temp,pos):
+        num = len(res)                  # 回溯前先记下答案中有多少个元素
+        if pos == len(s):
+            res.append(" ".join(temp))
+            return
+        for i in range(pos,len(s)+1):
+            if memo[i] and s[pos:i] in wordDict: # 添加备忘录的判断条件
+                temp.append(s[pos:i])
+                dfs(wordDict,temp,i)
+                temp.pop()
+        # 答案中的元素没有增加，说明s[pos:]不能分割，修改备忘录        
+        memo[pos] = 1 if len(res) > num else 0 
+            
+    dfs(wordDict,[],0)
+    return res
+```
+1. 回溯算法：通过`if pos == len(s):`判定循环结束，并且return回到前一个循环，将最后一个值弹出，并添加弹出记忆
+2. `.join()`函数返回通过前面指定字符连接括号中元素后生成的新字符串
+
+# 110. 平衡二叉树
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+本题中，一棵高度平衡二叉树定义为：
+一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+## 自顶向下递归
+```python
+def isBalanced(self, root: TreeNode) -> bool:
+    def maxDepth(root):
+        if not root:
+            return 0
+        else:
+            return max(maxDepth(root.right),maxDepth(root.left))+1
+    if not root:
+        return True
+    elif abs(maxDepth(root.left)-maxDepth(root.right))>1:
+        return False
+    else:
+        return self.isBalanced(root.left) and self.isBalanced(root.right)
+```
+1. 深度优先算法
+## 自底向上递归
+```python
+def isBalanced(self, root: TreeNode) -> bool:
+        return self.recur(root) != -1
+
+def recur(self, root):
+    if not root:
+        return 0
+    left = self.recur(root.left)
+    if left == -1:
+        return -1
+    right = self.recur(root.right)
+    if right == -1:
+        return -1
+    if abs(left - right) < 2:
+        return max(left, right) + 1 
+    else:
+        return -1
+```
+1. 提前剪枝
+2. 不平衡则返回-1作为子树高度
+3. 通过一次高度计算历遍解决问题
