@@ -1,173 +1,281 @@
-# 变量与简单数据类型
-## 变量
+# 变量
 1. 变量名只能包含字母、数字和下划线。变量名可以字母或下划线打头，但不能以数字打头
 2. 变量名不能包含空格，但可使用下划线来分隔其中的单词
 3. Python关键字和函数名不能用作变量名
-## 字符串
-1. name.title():首字母大写显示每个单词
-2. 拼接字符串：+
-```python
-first_name = "ada"
-last_name = "lovelace"
-full_name = first_name + " " + last_name
-```
-3. 使用制表符或换行符来添加空白
-\t:制表符，一个tab
-\n:换行符，换行
-4. 删除空白
-rstrip():暂时删除字符串末尾空白
-lstrip():暂时删除字符串开头空白
-strip():暂时删除字符串两端空白
-5. 历遍字符串
+4. python支持三元表达式`"yahoo!" if 3 > 2 else 2`
+
+
+
+# 运算符
+## 数字运算符
+1. `+ - * /`加减乘除,其中除法一定得到浮点数
+2. `// % **`整除，取余，乘方
+
+## 逻辑运算法
+1. `and or not` 与、或、非（优先级not>and>or）
+2. `== > < >= <= !=`判断相等、大于、小于、大于等于、小于等于、不等于
+3. `is`判断两个引用是否指向同一对象（判断地址）；`==`判断两个引用指向的具体内容是否相等（判断内容）
+4. `in`判断元素是否存在列表、字典的键、元组、集合中
+    元素不在字典的键中会报错
+5. `bool()`执行函数将0视为False，其他所有值视为True
+
+
+# 数字
+## 整数（int）
+
+## 浮点数（float）
+带小数点的数字
+
+## str()
+将得字符串转换为字符串，这样才能print
+
+
+
+# 字符串
+## 拼接字符串
+1. +`字符串1+字符串2`
+2. 直接写在一起`字符串1字符串2`
+3. 以指定字符连接序列元素形成新字符串`连接用的字符.join(要被连接的序列)`
+
+## 字符串索引
+1. 获得索引对应值：`字符串名[索引值]`
+2. 计算字符串长度：`len(字符串名)`
+3. 获得值对应索引：
+    + `被检测字符串名.find(检测的字符串，开始检测索引，结束检测索引)`默认从头检测到尾，返回最先检测到的值，检测不到返回-1
+    + `被检测字符串名.index(检测的字符串，开始检测索引，结束检测索引)`默认从头检测到尾，返回最先检测到的值，检测不到报异常
+    + `被检测字符串名.rfind(检测的字符串，开始检测索引，结束检测索引)`返回最后检测到的值
+
+## 常用函数
+1. 每个单词首字母大写其余小写`字符串名.title()`
+2. 使用制表符或换行符来添加空白
+    `\t`:制表符，一个tab
+    `\n`:换行符，换行
+3. 删除空白
+`rstrip()`:暂时删除字符串末尾空白
+`lstrip()`:暂时删除字符串开头空白
+`strip()`:暂时删除字符串两端空白
+
+## 历遍字符串
 ```python
 for i , n in enumerate(s):
 ```
-## 数字
-### 整数（int）
-### 浮点数（float）
-带小数点的数字
-### str()
-将得字符串转换为字符串，这样才能print
+
+
 
 # 列表
-## 概述
 1. 定义：由一系列按特定顺序排列的元素组成
-2. 访问列表元素：指出索引即可
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-print(bicycles[0])
-```
-3. 索引从0开始,负数可以反向索引
-## 修改、添加和删除元素
-### 修改
-直接赋值
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-bicycles[0] = 'ducati'
-```
-### 添加
-#### 末尾添加元素(.append)
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-bicycles.append('ducati')
-```
-#### 在列表中插入元素(.insert)
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-bicycles.insert(0,'ducati') #在位置0插入decati
-```
-### 删除
-1. del语句
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-del  bicycles[0]
-```
-2. pop()
-删除列表末尾的元素，出栈
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-poped_bicycles = bicycles.pop()
-```
-3. 弹出列表任意位置处的元素
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-poped_bicycles = bicycles.pop(0)
-```
-4. 根据值删除元素(.remove)
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-bicycles.remove('trek')
-```
+
+## 创建列表
+1. 空列表`列表名 = []`
+2. 赋值列表`列表名 = [元素1 , 元素2]`
+
+## 访问列表
+1. 通过索引访问值`列表名[索引值]`
+2. 索引从0开始,负数可以反向索引
+3. 通过值访问索引
+
+## 修改元素
+1. 直接赋值`列表名[希望赋值的索引] = 赋予的值`
+
+## 添加元素
+1. 末尾添加元素`列表名称.append(添加的元素)`
+2. 在列表中插入元素`列表名称.insert(插入元素索引值，元素)`
+3. 在列表末尾添加多个元素`被添加列表名称.extend(保存添加元素的列表)`
+4. 加法运算相当于extend`列表1+列表2`
+
+## 删除
+1. del语句`del  列表名[要删除元素的索引]`
+2. 出栈，可得到索引元素值`出栈元素值 = 列表名.pop(索引)`
+    不写索引默认为末尾元素
+4. 根据值删除元素`列表名.remove(要删除元素值)`
+
+## 使用列表的一部分
+1. 切片
+    + `列表名[切片开始:切片结束:切片步距]`
+    + 切片左闭右开
+    + 可以另步距为-1实现倒叙
+2. 复制
+    + 不能直接用`==`，这样复制地址内容没有备份
+    + 要用切片复制`存储列表 = 被复制列表[:]`
+    + `被复制列表.copy()`
+
 ## 组织列表
-### .sort()
-永久性按照字母顺序排序
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-bicycles.sort() #字母顺序
-bicycles.sort(reverse=True) #字母反顺序
-```
-### sorted()
-临时性按照字母顺序排序
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-sorted(bicycles) #字母顺序
-```
-### .reverse()
-永久性反转列表
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-bicycles.reverse()
-```
-### 确定列表长度len()
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-len(bicycles)
-```
+1. 永久性按照字母顺序排序
+    + `列表名.sort(key=None , reverse=False)`
+    + key：用来进行比较的元素，默认第一个
+    + reverse默认为True，降序
+2. 临时性按照字母顺序排序 `列表名.sorted(key=None , reverse=False)`
+3. 永久性反转列表`列表名.reverse()`
+4. 得到列表长度`len(列表名)`
+
 ## 历遍列表
 ```python
 bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
 for bicycle in bicycles:
     print(bicycle)
 ```
-## 创建数值列表
-```python
-numbers = list(range(1,7,2)) #从1到7每2个取1个
-[1,3,5]
-numbers = [] #空列表
-min(numbers)
-max(numbers)
-sum(numbers)
-```
-## 使用列表的一部分
-### 切片
-```python
-numbers = list(range(1,7,))
-print(numbers[1:5:-1]) #从1到5反向切片
-[5,4,3,2]
-```
-### 遍历切片
-```python
-numbers = list(range(1,7,))
-for number in numbers[:4]:
-    print(number)
-[1,2,3,4]
-```
-### 复制列表
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-#如果直接相等是复制的地址
-list1 = bicycles
-list1.append('ducati')
-bicycles.append('')
-print(list1)
-['trek' , 'cannondale','redline' , 'speciaized' , 'ducati' , '']
-print(bicycles)
-['trek' , 'cannondale','redline' , 'speciaized' , 'ducati' , '']
-#需要通过切片的形式复制
-list1 = bicycles[:]
-list1.append('ducati')
-bicycles.append('')
-print(list1)
-['trek' , 'cannondale','redline' , 'speciaized' , 'ducati']
-print(bicycles)
-['trek' , 'cannondale','redline' , 'speciaized' , '']
-```
-## 元组
+
+
+
+# 元组
 不可变的列表
-### 定义元组
-1. 用()而不是[]
-```python
-dimensions = (200,50)
-```
-2. 一个元素的元组必须加","，因为小括号有优先级问题
-```python
-dimensions = (200,)
-```
-### 遍历元组
+
+## 创建元组
+1. 空元组
+`元组名 = ()`
+2. 一个元素的元组
+`元组名 = (元素1,)`
+一个元素的元组必须加","，因为小括号有优先级问题，否则会被认为是单个元素
+3. 普通赋值元组
+`元组名 = (元素1,元素2)`
+
+## 元组操作
+支持列表中绝大部分操作
+
+## 遍历元组
 和列表一样
-### 修改元组变量
+
+## 多个变量解压元组
+`a, *b , c = (1,2,3,4)`
+标星号表示b为一个list，其他变量一一对应后所剩的变量都是b的
+
+## 修改元组变量
 1. 重新定义，不能单独修改一个值
 2. 元组本身不能改变，但元组内可变元素（列表等）是可以改变的
+
+
+
+# 字典
+存储key和value的键值对。我们用{}表示一个dict，用:分隔key和value
+
+## 创建字典
+1. 创建空字典
+`字典名 = {}`
+2. 赋值创建字典
+`字典名 = {键:值}`
+3. 键必须为不可变对象，list和dict都不可以作键
+
+## 访问字典
+1. 检索方式，查找不到key会报错
+`值 = 字典名[查找的键] `
+2. get方式查找不到会返回None
+`值 = 字典名.get(查找的键) `
+3. 返回所有键
+`所有键的列表 = list(字典名.keys())`
+4. 返回所有值
+`所有键的列表 = list(字典名.values())`
+
+## 插入新的字典对应
+1. 为不存在的key插入value，存在不覆盖
+`字典名.setdefault(键,值)`
+2. 为不存在的key插入value，存在覆盖
+    `字典名.update({键:值})`
+    `字典名[键] = 值`
+
+## 删除键——对值
+`del 字典名[键]`
+只能传入键
+
+## 历遍字典
+1. 历遍所有键——值对
+`for key,value in 字典名.items():`
+2. 历遍字典中的所有键
+`for key,value in 字典名.keys():`
+3. 历遍字典中的所有值
+`for key,value in 字典名.values():`
+
+## 嵌套
+1. 字典列表
+```python
+alien_0 = {'color':'green' , 'points':5}
+alien_1 = {'color':'yellow' , 'points':10}
+alien_2 = {'color':'red' , 'points':15}
+aliens = [alien_0 , alien_1 , alien_2]
+for alien in aliens:
+    if alien['color'] == 'green':
+        print(alien['points'])
+```
+2. 字典中存储列表
+```python
+favorite_languages = {'jen':['python' , 'ruby'] , 'sarah':['ruby' , 'go'] , 'edward':['c']}
+for name,languages in favorite_languages.item():
+    for language in  languages:
+        print(language)
+```
+3. 字典中存储字典
+```python
+users = {
+    'aeinstein': {'first': 'albert' , 'last': 'einstein' ,'location':'princeton'},
+    'mcurie': {'first': 'marie' , 'last': 'curie' , 'location': 'paris'}
+    }
+for username,user_info in users.item():
+    print("\nUsername: " + username)
+    for key,value in user_info:
+        print(key + value)
+```
+
+
+
+# 集合
+用来存储不重复元素的容器，当中的元素都是不同的，相同的元素会被删除
+
+## 创建集合
+1. 创建空集合
+`集合名 = set()`
+不能用{}创建空集合，会与字典冲突
+2. 赋值创建集合
+    `集合名 = set(元素)`
+    `集合名 = {元素}`
+3. set当中的元素也必须是不可变对象，因此list不能传入set
+
+## 插入元素
+1. 添加单个元素，存在则不操作
+`集合名.add(元素)`
+2. 添加多个元素，保证集合内元素不重复
+`集合名.update(元素)`
+这里元素可以是列表，元组，字典等，会自动展开元素
+
+## 删除元素
+1. 移除元素，不存在则报错
+`集合名.remove(要移除的元素)`
+2. 移除元素，不存在不会报错
+`集合名.discard(要移除的元素)`
+3. 随机删除一个元素
+`集合名.pop()`
+pop过程中会对集合无序排列，删除左边第一个元素
+
+## 支持的集合操作
+1. 交集
+`集合1 & 集合2`
+2. 并集
+`集合1 | 集合2`
+3. 差集
+`被求差集合 - 集合2`
+4. 对称集
+`对称保留集合 ^ 集合2`
+将前一个集合去掉两集合的交集
+5. 超集、子集判断
+`集合1 >= 集合2`判断1是否为2的超集
+`集合1 <= 集合2`判断1是否为2的子集
+
+## 其他常用函数
+1. 计算个数
+`len(集合名)`
+2. 清空集合
+`集合名.clear()`
+
+
+
+# 输入输出
+## 输入
+1. `input(要输出的量)`
+2. 传入字符串
+## 输出
+1. `print(要输出的量)`
+2. 默认输出自动换行
+3. `print(要输出的量,end=' ')`更换字符结尾替代换行
+
+
 
 # if
 ## 条件测试
@@ -193,106 +301,16 @@ dimensions = (200,)
 ### 多个elif
 ### 省略else
 
-# 字典
-## 使用字典
-字典是一系列键——值对，每个键都与一个值相关，使用键来访问与之相关的值
-```python
-alien_0 = {'color':'green'}
-```
-'color'是键，与之相关的值是'green'
-### 访问字典
-1. 检索方式，查找不到key会报错
-```python
-alien_0 = {'color':'green'}
-print（alien_0['color']） 
-```
-2. get方式查找不到会返回None
-```python
-alien_0 = {'color':'green'}
-print（alien_0.get('color')） 
-```
-### 创建字典
-```python
-alien_0 = {}
-alien_0['color'] = 'green'
-```
-### 修改字典中的值
-```python
-alien_0 = {'color':'green'}
-alien_0['color'] = 'yellow'
-```
-### 删除键——对值
-```python
-alien_0 = {'color':'green' , 'points':5}
-del ailen_0['points']
-```
-## 历遍字典
-### 历遍所有键——值对
-.items()
-```python
-alien_0 = {'color':'green' , 'points':5}
-for key,value in alien_0.items():
-```
-### 历遍字典中的所有键
-.keys()
-```python
-alien_0 = {'color':'green' , 'points':5}
-for key,value in alien_0.keys():
-```
-### 历遍字典中的所有值
-.values()
-```python
-alien_0 = {'color':'green' , 'points':5}
-for key,value in alien_0.values():
-```
-## 嵌套
-### 字典列表
-```python
-alien_0 = {'color':'green' , 'points':5}
-alien_1 = {'color':'yellow' , 'points':10}
-alien_2 = {'color':'red' , 'points':15}
-aliens = [alien_0 , alien_1 , alien_2]
-for alien in aliens:
-    if alien['color'] == 'green':
-        print(alien['points'])
-```
-### 字典中存储列表
-```python
-favorite_languages = {'jen':['python' , 'ruby'] , 'sarah':['ruby' , 'go'] , 'edward':['c']}
-for name,languages in favorite_languages.item():
-    for language in  languages:
-        print(language)
-```
-### 字典中存储字典
-```python
-users = {
-    'aeinstein': {'first': 'albert' , 'last': 'einstein' ,'location':'princeton'},
-    'mcurie': {'first': 'marie' , 'last': 'curie' , 'location': 'paris'}
-    }
-for username,user_info in users.item():
-    print("\nUsername: " + username)
-    for key,value in user_info:
-        print(key + value)
-```
 
-# 用户输入与while循环
-## 函数input()
-```python
-height = input("How tall are you, in inches? ")
-height = int(height)
-if height >= 36:
-    print("\nYou're tall enough to ride!"
-else:
-    print("\nYou'll be able to ride when you're a little olde.")
-```
-## while循环
-### 使用while循环
+
+# while循环
+## 使用while循环
 ```python
 current_number = 1
 while current_number <= 5:
     print(current_number)    current_number += 1
 ```
-### 使用break退出循环
+## 使用break退出循环
 ```python
 prompt = "\nPlease enter the name of a city you have visited:"
 prompt += "\n(Enter 'quit' when you are finished.) "
@@ -303,7 +321,7 @@ while True:
     else:
         print("I'd love to go to " + city.title() + "!")
 ```
-### 使用continue继续
+## 使用continue继续
 ```python
 current_number = 0
 while current_number < 10:

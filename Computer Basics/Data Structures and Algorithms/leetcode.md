@@ -1445,3 +1445,281 @@ def recur(self, root):
 1. 提前剪枝
 2. 不平衡则返回-1作为子树高度
 3. 通过一次高度计算历遍解决问题
+
+# 349. 两个数组的交集
+给定两个数组，编写一个函数来计算它们的交集。
+## python集合函数
+```python
+def intersection(nums1, nums2):
+    set1 = set(nums1)
+    set2 = set(nums2)
+    set3 = set1.intersection(set2)
+    num = []
+    for  n in set3:
+        num.append(n)
+    return num
+```
+```python
+def intersection(nums1, nums2):
+    return list(set(nums1) & set(nums2))
+```
+1. `.intersection()`函数，返回前集合与后集合之间的交集
+2. &直接求集合交集
+## 哈希表
+```python
+def intersection(nums1, nums2):
+    dic = {}
+    num = []
+    for i in range(len(nums1)):
+        dic[nums1[i]] = 1
+    for n in nums2:
+        if dic.get(n) == 1:
+            num.append(n)
+            dic[n] = 0
+    return num
+```
+1. `dict.get(key, default=None)`避免寻找字典中不存在的数字报错
+## 排序双指针
+```python
+def intersection(nums1, nums2):
+    nums1.sort()
+    nums2.sort()
+    num = []
+    i,j = 0,0
+    while i <len(nums1) and j < len(nums2):
+        if nums1[i] == nums2[j]:
+            if not num or nums1[i] != num[-1]:
+                num.append(nums1[i])
+            i += 1
+            j += 1
+        elif nums1[i] < nums2[j]:
+            i += 1
+        else:
+            j += 1
+    return num 
+```
+
+# 111. 二叉树的最小深度
+给定一个二叉树，找出其最小深度。
+最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+说明：叶子节点是指没有子节点的节点。
+## 深度优先算法
+```python
+def minDepth(self, root: TreeNode) -> int:
+    if not root:
+        return 0
+    if not root.left and not root.right:
+        return 1
+    mindepth = 10**9
+    if root.left:
+        mindepth = min(self.minDepth(root.left),mindepth) 
+    if root.right:
+        mindepth = min(self.minDepth(root.right),mindepth) 
+    return mindepth +1
+```
+1. 不能直接在mindepth上+1，这样会导致每次判断都+1，但不是每次判断都有效
+## 广度优先算法
+```python
+def minDepth(self, root: TreeNode) -> int:
+    if not root:
+        return 0
+    q = collections.deque([(root, 1)])
+    while q:
+        node, depth = q.popleft()
+        if not node.left and not node.right:
+            return depth
+        if node.left:
+            q.append((node.left, depth + 1))
+        if node.right:
+            q.append((node.right, depth + 1))
+    return 0
+```
+1. 在双向列表中一个元素传入两个量来表示深度
+
+# 941. 有效的山脉数组
+给定一个整数数组 A，如果它是有效的山脉数组就返回 true，否则返回 false。
+## 线性扫描
+```python
+def validMountainArray(A):
+    sign = 0
+    i = 0
+    for i in range(len(A)-1):
+        if A[i]<A[i+1] and sign == 0:
+            continue
+        elif A[i]>A[i+1] and sign == 0  and i != 0:
+            sign = 1
+        elif A[i]>A[i+1] and sign == 1:
+            continue
+        else:
+            return False
+    return sign == 1
+```
+## 双指针
+```python
+def validMountainArray(A):
+    i,j = 0,len(A)-1
+    while i+1<len(A) and A[i]<A[i+1]:
+        i += 1
+    while j-1>0 and A[j]<A[j-1]:
+        j -= 1
+    return i==j and i>0 and j<len(A)-1
+```
+1. 限制条件要考虑下一项的存在
+2. 返回正确的条件要考虑只有一边的情况
+
+# 112. 路径总和
+给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
+说明: 叶子节点是指没有子节点的节点。
+## 深度优先算法+递归
+```python
+def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+    if not root:
+        return False
+    if not root.right and not root.left:
+        return root.val == sum
+    return self.hasPathSum(root.left,sum-root.val) or self.hasPathSum(root.right,sum-root.val)
+```
+1. 要考虑到不能截取中间路径
+
+# 57. 插入区间
+给出一个无重叠的 ，按照区间起始端点排序的区间列表。
+在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+```python
+def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+    sign = 0
+    i = 0
+    if not intervals:
+        return [newInterval]
+    while i < len(intervals):
+        if intervals[i][1] < newInterval[0] and i != len(intervals)-1:
+            i += 1
+            continue
+        elif intervals[i][1] < newInterval[0]:
+            intervals.append(newInterval)
+        elif intervals[i][1] == newInterval[0]:
+            intervals[i][1] = newInterval[1]
+            sign = 1
+        elif intervals[i][0] >newInterval[1] and sign == 0:
+            intervals.insert(i,newInterval)
+            sign = 1
+            i += 1
+        elif intervals[i][0] >newInterval[1] and sign == 1:
+            i += 1
+            continue
+        elif intervals[i][0] > newInterval[0] and sign == 0:
+            intervals[i][0] = newInterval[0]
+            intervals[i][1] = max(newInterval[1] , intervals[i][1])
+            sign = 1
+        elif intervals[i][0] > newInterval[0] and sign == 1:
+            intervals[i-1][1] = max(newInterval[1],intervals[i][1])
+            del intervals[i]
+            i -= 1
+        elif intervals[i][0] <= newInterval[0]:
+            intervals[i][1] = max(newInterval[1] , intervals[i][1])
+                sign = 1
+            i += 1
+    return intervals
+```
+1. 通过插入区间和两个原区间的关系把边界条件考虑清楚
+
+# 127. 单词接龙
+给定两个单词（beginWord 和 endWord）和一个字典，找到从 beginWord 到 endWord 的最短转换序列的长度。转换需遵循如下规则：
+每次转换只能改变一个字母。
+转换过程中的中间单词必须是字典中的单词。
+说明:
+如果不存在这样的转换序列，返回 0。
+所有单词具有相同的长度。
+所有单词只由小写字母组成。
+字典中不存在重复的单词。
+你可以假设 beginWord 和 endWord 是非空的，且二者不相同。
+## 单向广度优先算法
+```python
+def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+    general_dic = {}
+    q = collections.deque([(beginWord,1)])
+    mark_dic = {beginWord:True}
+    for w in wordList:
+        for i in range(len(beginWord)):
+            if w[:i]+"*"+w[i+1:] in general_dic:
+                general_dic[w[:i]+"*"+w[i+1:]].append(w)
+            else:
+                general_dic[w[:i]+"*"+w[i+1:]] = [w]
+    while q:
+        node ,depth= q.popleft()
+        for i in range(len(beginWord)):
+            if node[:i]+"*"+node[i+1:] in general_dic:
+                for w in general_dic[node[:i]+"*"+node[i+1:]]:
+                    if w == endWord:
+                        return depth+1
+                    if w not in mark_dic:
+                        mark_dic[w]=True
+                        q.append((w,depth+1))
+    return 0
+```
+1. 获得单词的关联单词方法
+2. 标记已经走过的单词
+3. 存在一个关联单词对应多个值，字典中套用列表
+## 双向广度优先算法
+```python
+from collections import deque
+def ladderLength(beginWord, endWord, wordList):
+    general_dic = {}
+    q = deque([beginWord])
+    p = deque([endWord])
+    mark_dic = {beginWord:True,endWord:True}
+    step = 2
+    length = len(q)
+    if endWord not in wordList:
+        return 0
+    for w in wordList:
+        for i in range(len(beginWord)):
+            if w[:i]+"*"+w[i+1:] in general_dic:
+                general_dic[w[:i]+"*"+w[i+1:]].append(w)
+            else:
+                general_dic[w[:i]+"*"+w[i+1:]] = [w]
+    while q and p:
+        length = len(q)
+        step += 1
+        for j in range(length):
+            node = q.popleft()
+            for i in range(len(beginWord)):
+                if node[:i]+"*"+node[i+1:] in general_dic:
+                    for w in general_dic[node[:i]+"*"+node[i+1:]]:
+                        if w in p:
+                            return step
+                        if w not in mark_dic:
+                            mark_dic[w]=True
+                            q.append(w)
+        if len(q) > len(p):
+            q, p = p, q
+    return 0
+```
+1. 从头和尾一起搜索，一直搜索少的那一个
+2. 判断步数增加的方法要改变，方便判断两者相遇
+
+# 118. 杨辉三角
+给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
+在杨辉三角中，每个数是它左上方和右上方的数的和。
+```python
+def generate(numRows):
+    total_list = []
+    p = [1]
+    j ,i= 0,0
+    while j < numRows:
+        total_list.append(p)
+        size = len(p)
+        p = []
+        i = 0
+        while i <= size:
+            if i == 0:
+                p.append(1)
+            elif i == size:
+                p.append(1)
+            else:
+                p.append(total_list[j][i-1]+total_list[j][i])
+            i += 1
+        j += 1
+    return total_list
+```
+1. 广度优先算法思维
+2. 动态规划
