@@ -109,11 +109,10 @@ for i , n in enumerate(s):
 4. 得到列表长度`len(列表名)`
 
 ## 历遍列表
-```python
-bicycles = ['trek' , 'cannondale','redline' , 'speciaized']
-for bicycle in bicycles:
-    print(bicycle)
-```
+1. 历遍元素
+`for 后续代表元素名称 in 列表名:`
+2. 同时历遍索引和元素
+`for i, value in enumerate(列表名)`
 
 
 
@@ -180,9 +179,9 @@ for bicycle in bicycles:
 1. 历遍所有键——值对
 `for key,value in 字典名.items():`
 2. 历遍字典中的所有键
-`for key,value in 字典名.keys():`
+`for key in 字典名.keys():`
 3. 历遍字典中的所有值
-`for key,value in 字典名.values():`
+`for value in 字典名.values():`
 
 ## 嵌套
 1. 字典列表
@@ -280,20 +279,26 @@ pop过程中会对集合无序排列，删除左边第一个元素
 # if
 ## 条件测试
 条件测试：值为True或Flase的表达式
+
 ### 检查是否相等
 1. 使用==
 2. 直接使用时考虑大小写
 3. 加上.lower()时就可全部变为小写判断
+
 ### 检查是否不相等
 使用!=
+
 ### 比较数字
 可以包含等于、不等于、大于、小于等
+
 ### 检查多个条件
 1. and表示和
 2. or表示或
+
 ### 检查特定值是否在/不在
 1. in表示在
 2. not in表示不在
+
 ### 布尔表达式
 ## 语句结构
 ### if-else
@@ -330,6 +335,67 @@ while current_number < 10:
         continue
     print(current_number)
 ```
+
+
+
+# 迭代器
+iterator，永远指向当前的位置，永远知道下一个位置在哪里
+
+## 容器迭代器
+1. 使用关键字获取迭代器
+`迭代器名 = iter(可迭代对象)`
+可迭代对象指list、tuple、dict类型
+2. 调用迭代器
+    + `获取的元素 = next(迭代器名)`
+    获得迭代器中下一个元素
+    + `for 获取的元素 in 迭代器名`
+3. 调用迭代器超过元素个数会引发超界，Python抛出Stoplteration的error
+
+## 自定义迭代器
+```python
+class PowTwo:
+    生成2的幂的迭代器
+
+    def __init__(self, max = 0):
+        self.max = max
+
+    def __iter__(self):
+        self.n = 0
+        return self
+
+    def __next__(self):
+        if self.n <= self.max:
+            result = 2 ** self.n
+            self.n += 1
+            return result
+        else:
+            raise StopIteration
+```
+
+
+
+# 生成器
+生成器的概念和迭代器相辅相成，迭代器是生成一个遍历数据的迭代工具，而生成器则是数据生成工具
+
+## 括号创建法
+1. `生成器名称 = (元素循环内操作 for i in range(元素个数))`
+2. 和用循环生成list几乎没什么差别，只是使用（）
+3. 循环生成list的时候会运行整个循环，但创建生成器的时候只有每次调用的时候才会触发一次循环
+
+## 函数创建法
+1. 看上起定义一个函数，但返回的不是一个值而是生成器
+```python
+def 生成器名称(生成器生成个数):
+    for i in range(生成器生成个数):
+        yield f(i) #此处可以是关于i的任意函数
+```
+2. 关键词yield
+    + 与return的相同点：会将之后的内容返回给调用方
+    + 不同点：当我们下一次再次执行的时候，会继续从上次yield处开始往下执行
+3. 关键词yield from
+返回一个迭代器或者是生成器执行next之后的结果
+
+
 
 # 函数
 ## 定义函数

@@ -1723,3 +1723,84 @@ def generate(numRows):
 ```
 1. 广度优先算法思维
 2. 动态规划
+
+# 1356. 根据数字二进制下 1 的数目排序
+给你一个整数数组 arr 。请你将数组中的元素按照其二进制表示中数字 1 的数目升序排序。
+如果存在多个数字二进制中 1 的数目相同，则必须将它们按照数值大小升序排列。
+请你返回排序后的数组。
+## 哈希表余数计数
+```python
+def sortByBits(arr):
+    dic = {}
+    count ,count_list= 0,[]
+    arr1 = []
+    arr.sort()
+    for num in arr:
+        n = num
+        count = 0
+        while n >0:
+            count += n%2
+            n = n // 2
+        if count not in dic:
+            dic[count] = [num]
+            count_list.append(count)
+        else:
+            dic[count].append(num)
+    count_list.sort()
+    for count in count_list:
+        if not arr1:
+            arr1 = dic[count]
+        else:
+            arr1.extend(dic[count])
+    return arr1
+```
+1. 为了控制最后输出按照顺序，需按序查找key，以及key对应的value按序排列
+## 哈希表字符串计数
+```python
+def sortByBits(arr):
+    dic = {}
+    arr1 = []
+    arr.sort()
+    count_list = []
+    for num in arr:
+        count = 0
+        for s in str(bin(num)):
+            if s == '1':
+                count += 1
+        if count not in dic:
+            dic[count] = [num]
+            count_list.append(count)
+        else:
+            dic[count].append(num)
+    count_list.sort()
+    for count in count_list:
+        if not arr1:
+            arr1 = dic[count]
+        else:
+            arr1.append(dic[count])
+    return arr1
+```
+
+# 119. 杨辉三角 II
+给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
+## 动态规划
+```python
+def getRow(rowIndex):
+    q = [1]
+    i,j,size = 0,0,0
+    while i < rowIndex:
+        size += 1
+        p = q
+        q = []
+        j = 0
+        while j <=size:
+            if j == 0:
+                q.append(1)
+            elif j == size:
+                q.append(1)
+            else:
+                q.append(p[j-1]+p[j])
+            j += 1
+        i += 1
+    return q
+```
