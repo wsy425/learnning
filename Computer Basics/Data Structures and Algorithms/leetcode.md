@@ -1804,3 +1804,362 @@ def getRow(rowIndex):
         i += 1
     return q
 ```
+
+# 327. 区间和的个数
+给定一个整数数组 nums，返回区间和在 [lower, upper] 之间的个数，包含 lower 和 upper。
+区间和 S(i, j) 表示在 nums 中，位置从 i 到 j 的元素之和，包含 i 和 j (i ≤ j)。
+## 暴力法
+```python
+def countRangeSum(nums, lower, upper):
+    count = 0
+    for i in range(len(nums)):
+        total = 0
+        for j in range(i,len(nums)):
+            total += nums[j]
+            if lower <= total <= upper:
+                count += 1
+    return count
+```
+## 区间和内求个数
+```python
+import bisect
+def countRangeSum(nums, lower, upper):
+    res = cur = 0
+    s = [0]
+    for v in nums:
+        cur += v
+        res += bisect.bisect_right(s, cur-lower) - bisect.bisect_left(s, cur-upper)
+        bisect.insort_right(s, cur)
+    return res
+```
+1. 对于指定右端点j，满足要求的左端点符合$ pre_sum[j] - upper <= pre_sum[i] <= pre_sum[j] - lower $
+2. 对所有到pre_sum排序，获取上式的端点所以就能获得指定右端点j的满足条件的区间和个数
+3. bisect板块，bisect.bisect返回如果插入的索引，bisect.insort添加元素，都在保证顺去的情况下
+
+# 121. 买卖股票的最佳时机
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+如果你最多只允许完成一笔交易（即买入和卖出一支股票一次），设计一个算法来计算你所能获取的最大利润。
+注意：你不能在买入股票前卖出股票。
+## 双指针
+```python
+def maxProfit(prices):
+    i,j,profit = 0,1,0
+    while j < len(prices):
+        if prices[j] > prices[i]:
+            profit = max(profit,prices[j]-prices[i])
+            j += 1
+        else:
+            i += 1
+            j = i+1
+    return profit
+```
+## 一次遍历
+```python
+def maxProfit(prices):
+    inf = int(1e9)
+    minprice = inf
+    profit = 0
+    for price in prices:
+        profit = max(price - minprice, profit)
+        minprice = min(price, minprice)
+    return profit
+```
+
+# 122. 买卖股票的最佳时机 II
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+## 双指针
+```python
+def maxProfit(prices):
+    inf = int(1e9)
+    minprice = inf
+    profit ,j = 0,0
+    sign = 0
+    while j<len(prices)-1:
+        if prices[j]<prices[j+1] :
+            minprice = min(prices[j], minprice)
+            sign = 1
+        elif prices[j]>prices[j+1] and sign == 1:
+            profit += prices[j] - minprice
+            minprice = inf
+            sign = 0
+        j += 1
+    if sign == 1:
+        profit = profit + prices[-1] - minprice
+    return profit
+```
+1. 使用标志指针
+2. 一次确定山峰前的最小值
+## 一次遍历
+```python
+def maxProfit(prices):
+    profit = 0
+    for i in range(1, len(prices)):
+        tmp = prices[i] - prices[i - 1]
+        if tmp > 0: profit += tmp
+    return profit
+```
+1. 每次前一个小于现在就把差值加入，否则跳过
+
+# 125. 验证回文串
+给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+说明：本题中，我们将空字符串定义为有效的回文串。
+## 记忆+双指针
+```python
+def isPalindrome(s):
+    i,j = 0,len(s)-1
+    me = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    while i < j:
+        if s[i].capitalize() not in me:
+            i += 1
+        elif s[j].capitalize() not in me:
+            j -= 1
+        elif s[i].capitalize() != s[j].capitalize():
+            return False
+        else:
+            i += 1
+            j -= 1
+    return True
+```
+## 优化
+```python
+def isPalindrome(s):
+    s = s.lower()
+    i,j = 0,len(s)-1
+    me = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    while i < j:
+        if s[i] not in me:
+            i += 1
+        elif s[j] not in me:
+            j -= 1
+        elif s[i] != s[j]:
+            return False
+        else:
+            i += 1
+            j -= 1
+    return True
+```
+1. 通过.low()函数将所有字母变为小写
+
+# 973. 最接近原点的 K 个点
+我们有一个由平面上的点组成的列表 points。需要从中找出 K 个距离原点 (0, 0) 最近的点。
+你可以按任何顺序返回答案。除了点坐标的顺序之外，答案确保是唯一的。
+## 新列表排序
+```python
+def kClosest(points, K):
+    listlen = []
+    out = []
+    for i in range(len(points)):
+        listlen.append([points[i][0]**2 + points[i][1]**2,i])
+    listlen.sort(key = lambda x:x[0])
+    for lenth in listlen[:K]:
+        out.append(points[lenth[1]])
+    return out
+```
+1. .sort()中key参数的赋值方式
+## 排序优化
+```python
+def kClosest(points, K):
+    points.sort(key=lambda x: (x[0] ** 2 + x[1] ** 2))
+    return points[:K]
+```
+## 快速排序（不推荐）
+```python
+def kClosest(points, K):
+    out = []
+    lenlist = []
+    j = 0
+    for i in range(len(points)):
+        if i<K:
+            out.append(points[i])
+            lenlist.append(points[i][0]**2 + points[i][1]**2)
+        elif points[i][0]**2+points[i][1]**2 < max(lenlist):
+            j = lenlist.index(max(lenlist))
+            out[j] = points[i]
+            lenlist[j] = points[i][0]**2+points[i][1]**2
+    return out
+```
+## 堆排序
+```python
+from heapq import heappush, heappop 
+def kClosest(points, K):
+    queue = []
+    distance = lambda x: points[x][0]**2 + points[x][1]**2
+    length = len(points)
+    for i in range(length):
+        heappush(queue, (distance(i), points[i]))
+    res = []
+    for i in range(K):
+        res.append(heappop(queue)[1])
+    return res
+```
+
+# 136. 只出现一次的数字
+给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+## 暴力判定
+```python
+def singleNumber(nums):
+    for i in range(len(nums)-1):
+        if nums[i] not in nums[:i] and nums[i] not in nums[i+1:]:
+            return nums[i]
+    return nums[-1]
+```
+## 删除+暴力判定
+```python
+def singleNumber(nums):
+    i = 0
+    while i <len(nums)-1:
+        a = nums[i]
+        if a in nums[i+1:]:
+            nums.remove(a)
+            nums.remove(a)
+            i -= 1
+        else:
+            return a
+        i += 1
+    return nums[-1]
+```
+## 删除+哈希表
+```python
+def singleNumber(nums):
+    dic = {}
+    for n in nums:
+        if n not in dic:
+            dic[n] = 1
+        else:
+            del dic[n]
+    for key in dic.keys():
+        return key
+```
+
+# 31. 下一个排列
+实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+必须原地修改，只允许使用额外常数空间。
+以下是一些例子，输入位于左侧列，其相应输出位于右侧列。
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1
+# 反向遍历
+```python
+def nextPermutation(nums):
+    for i in range(len(nums)-1,0,-1):
+        if nums[i] > nums[i-1]:
+            nums[i:] = sorted(nums[i:])
+            for j in range(i,len(nums)):
+                if nums[j] > nums[i-1]:
+                    nums[j] , nums[i-1] = nums[i-1] , nums[j]
+                    break
+            return
+    nums.sort()       
+```
+
+# 141. 环形链表
+给定一个链表，判断链表中是否有环。
+如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
+如果链表中存在环，则返回 true 。 否则，返回 false 。
+## 快慢指针
+```python
+def hasCycle(self, head: ListNode):
+    i,j = head,head
+    if not head:
+        return False
+    while j.next and j.next.next:
+        i = i.next
+        j = j.next.next
+        if i.val == j.val:
+            return True
+    return False
+```
+
+# 514. 自由之路
+电子游戏“辐射4”中，任务“通向自由”要求玩家到达名为“Freedom Trail Ring”的金属表盘，并使用表盘拼写特定关键词才能开门。
+给定一个字符串 ring，表示刻在外环上的编码；给定另一个字符串 key，表示需要拼写的关键词。您需要算出能够拼写关键词中所有字符的最少步数。
+最初，ring 的第一个字符与12:00方向对齐。您需要顺时针或逆时针旋转 ring 以使 key 的一个字符在 12:00 方向对齐，然后按下中心按钮，以此逐个拼写完 key 中的所有字符。
+旋转 ring 拼出 key 字符 key[ i] 的阶段中：
+您可以将 ring 顺时针或逆时针旋转一个位置，计为1步。旋转的最终目的是将字符串 ring 的一个字符与 12:00 方向对齐，并且这个字符必须等于字符 key[ i] 。
+如果字符 key[ i] 已经对齐到12:00方向，您需要按下中心按钮进行拼写，这也将算作 1 步。按完之后，您可以开始拼写 key 的下一个字符（下一阶段）, 直至完成所有拼写。
+1. 不能使用贪心算法，存在非局部最优解的全局最优解
+## 动态规划
+```python
+def findRotateSteps(ring, key):
+        Choices = d()  # 把每个key对应的可选的ring的字母的index做成字典。
+        for k in key:
+            if k in Choices:
+                continue
+            else:
+                Choices[k] = []
+                for ri, r in enumerate(ring):
+                    if r == k:
+                        Choices[k].append(ri)
+        counter = [{0 : 0}]
+        Path = d()
+        for keyi in range(len(key)): # 一共len(key)个格子。
+            counter.append({})
+            for choice in Choices[key[keyi]]:  # choice是个index，是表示对于在key上第keyi个字母来说，ring里有哪几个位置的字母可以选择。
+                temp = []
+                for start in counter[keyi].keys():  # start表示上一个格子里，有几种情况可以到达当前的choice。
+                    previous_distance = counter[keyi][start]
+                    s = str(start) + "-" + str(choice)
+                    if s not in Path:
+                        d1 = abs(choice - start)
+                        d2 = abs(len(ring) - d1)
+                        newc = min(d1, d2)
+                        Path[s] = newc
+                    temp.append(previous_distance + Path[s])
+                counter[keyi + 1][choice] = min(temp) + 1  # 只需要保留最小值  再加1表示按下按钮。
+        # print(Choices)
+        final = min(counter[-1].values())
+        return final
+```
+
+# 1122. 数组的相对排序
+给你两个数组，arr1 和 arr2，
+arr2 中的元素各不相同
+arr2 中的每个元素都出现在 arr1 中
+对 arr1 中的元素进行排序，使 arr1 中项的相对顺序和 arr2 中的相对顺序相同。未在 arr2 中出现过的元素需要按照升序放在 arr1 的末尾。
+## 暴力法
+```python
+def relativeSortArray(arr1, arr2):
+    arr = []
+    for i in range(len(arr2)):
+        while arr2[i] in arr1:
+            arr.append(arr2[i])
+            arr1.remove(arr2[i])
+    arr1.sort()
+    return arr + arr1
+```
+## 计数排序
+```python
+def relativeSortArray(arr1, arr2):
+    arr = []
+    frequency = [0] * (max(arr1) + 1)
+    for x in arr1:
+        frequency[x] += 1
+    for x in arr2:
+        arr.extend([x] * frequency[x])
+        frequency[x] = 0
+    for x in range(len(frequency)):
+        if frequency[x] != 0:
+            arr.extend([x] * frequency[x])
+    return arr
+```
+
+# 402. 移掉K位数字
+给定一个以字符串表示的非负整数 num，移除这个数中的 k 位数字，使得剩下的数字最小。
+注意:
+num 的长度小于 10002 且 ≥ k。
+num 不会包含任何前导零。
+## 栈
+```python
+def removeKdigits(num, k):
+    stack = []
+    remain = len(num) - k
+    for n in num:
+        while k and stack and stack[-1]> n:
+            stack.pop()
+            k -= 1
+        stack.append(n)
+    return ''.join(stack[:remain]).lstrip('0') or '0'
+```
