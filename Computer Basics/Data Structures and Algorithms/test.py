@@ -3,9 +3,9 @@ def findMinArrowShots(points):
     while points:
         x = points[0][0]
         j = 0
-        count = 0 
         max_count = 0
         while x <= points[0][1]:
+            count = 0 
             for point in points:
                 if x>= point[0] and x<= point[1]:
                     count += 1
