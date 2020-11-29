@@ -2231,3 +2231,31 @@ def fourSumCount(A, B, C, D):
                 count += dic[-u-v]
     return count
 ```
+
+# 493. 翻转对
+给定一个数组 nums ，如果 i < j 且 nums[ i] > 2*nums[ j] 我们就将 (i, j) 称作一个重要翻转对。
+你需要返回给定数组中的重要翻转对的数量。
+## 反向历遍+bisect模块
+```python
+def reversePairs(nums):
+    tb, res = [], 0
+    for n in reversed(nums) :
+        res += bisect.bisect_left(tb, n)
+        n2 = 2*n
+        bisect.insort_right(tb, n2)
+        return res
+```
+1. 反向历遍数组，将其两倍按顺序插入tb，累加下一项在tb的索引值
+
+# 976. 三角形的最大周长
+给定由一些正数（代表长度）组成的数组 A，返回由其中三个长度组成的、面积不为零的三角形的最大周长。
+如果不能形成任何面积不为零的三角形，返回 0。
+## 贪心+排序
+```python
+def largestPerimeter(A):
+    A.sort(reverse=True)
+    for i in range(len(A)-2):
+        if A[i]<A[i+1]+A[i+2]:
+            return A[i]+A[i+1]+A[i+2]
+    return 0
+```

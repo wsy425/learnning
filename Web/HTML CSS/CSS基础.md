@@ -129,3 +129,81 @@
 
 
 # 文本属性
+定义文本的外观，比如文本的颜色、对齐文本、装饰文本、文本缩进、行间距等
+
+## 文本颜色
+1. 语法
+```HTML
+div{
+    color: red;
+}
+```
+2. 属性内容
+    + 预设值（pink）
+    + 16进制数：#+6个数字
+    + rgb代码
+
+## 对齐文本
+1. text-align属性用于设置元素内文本内容的水平对齐方式
+2. 语法
+```HTML
+div{
+    text-align: center;
+}
+```
+
+## 装饰文本
+1. text-decoration属性规定添加到文本的修饰，可以给文本添加下划线、删除线、上划线等
+2. 语法
+```HTML
+div{
+    text-decoration: underline;
+}
+```
+3. 属性内容
+    + none：默认，没有装饰线
+    + underline：下划线
+    + overline：上划线
+    + line-through：删除线
+
+# 文本缩进
+1. text-indent属性用来指定文本首行缩进
+2. 语法
+```HTML
+div{
+    text-indent: 2em;
+}
+```
+3. em是一个相对尺寸，当前元素一个文字大小的距离
+
+## 行间距
+1. line-height属性由于设置行高
+2. 语法
+```HTML
+div{
+    line-height: 2em;
+}
+```
+3. 行高=上间距+文本高度+下间距
+
+![文本属性总结.jpg](https://i.loli.net/2020/11/29/VvieGfpDOP4wEAt.jpg)
+
+
+
+# 引入方式
+
+## 行内样式表（行内式）
+1. 在标签内部写上style属性
+2. 语法`<div style="color: red"></div>`
+3. 一定要是双引号，写法要符合CSS
+
+## 内部样式表（嵌入式）
+1. css写入html内部，写在< style>标签里
+2. 理论上< style>可以放在任何地方，但一般放在head里
+3. 可以控制整个页面
+4. 代码结构清晰，但并没有完全分离
+
+## 外部样式表
+1. 样式单独写到CSS文件中，HTML引用CSS文件
+2. 在HTML页面中，使用link标签引入
+3. 语法`<link rel="stylesheet" href="css文件路径">`
