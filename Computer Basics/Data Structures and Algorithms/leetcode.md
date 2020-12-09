@@ -2259,3 +2259,59 @@ def largestPerimeter(A):
             return A[i]+A[i+1]+A[i+2]
     return 0
 ```
+
+# 767. 重构字符串
+给定一个字符串S，检查是否能重新排布其中的字母，使得两相邻的字符不同。
+若可行，输出任意可行的结果。若不可行，返回空字符串。
+## 计数+贪心
+```python
+def reorganizeString(S):
+    d, max_key, max_value = {}, 'a', 0
+    for i in range(len(S)):
+        if S[i] not in d:
+            d[S[i]] = 1
+        else:
+            d[S[i]] += 1
+        if d[S[i]] > max_value:
+            max_key, max_value = S[i], d[S[i]]
+    if max_value > 1 + (sum(d.values()) - max_value):
+        return ''
+    elif len(d) == 1:
+        return S
+    key_value, res = [list(item) for item in sorted(list(d.items()), key=lambda x: x[1])], ''
+    sub_key, sub_value = key_value[len(key_value)-2][0], key_value[len(key_value)-2][1]
+    for i in range(len(key_value)):
+        while key_value[i][1]:
+            for j in range(i, len(key_value)):
+                res += key_value[j][0]
+                key_value[j][1] -= 1
+        if key_value[i][0] == sub_key:
+            break
+    left_value, index = max_value - sub_value, 0
+    while left_value:
+        if index == 0 or (res[index] != max_key and res[index-1] != max_key):
+            res = res[:index] + max_key + res[index:]
+            left_value -= 1
+        index += 1
+    return res
+```
+
+## 最大栈
+```python
+def reorganizeString(S):
+    res = ""
+    counter = collections.Counter(S)
+    if max(counter.values()) > (len(S)+1) // 2:
+        return res
+    pq = []
+    for key,val in counter.items():
+        heapq.heappush(pq,(-val,key))
+    prev = (0,None)
+    while pq:
+        v,k = heapq.heappop(pq)
+        res += k
+        if prev[0] < 0:
+            heapq.heappush(pq,prev)
+        prev = (v+1,k)
+    return res
+```
