@@ -454,3 +454,42 @@ div{
     + 浮动的元素互相贴在一起，不会有缝隙
     + 父级宽度装不下时，另起一行对齐
 3. 具有行内块元素的特性
+
+## 浮动布局注意点
+1. 浮动和标准流的父元素一起使用
+2. 一个元素浮动了，理论上兄弟元素也都应该浮动
+3. 浮动的盒子只会影响浮动盒子后面的标准流，不会影响前面的标准流
+
+## 清除浮动
+1. 父盒子无法设置高度的时候需要清除浮动
+2. 语法
+`选择器 {clear: left|right|both}`
+3. 清除浮动的方法
+    + 额外标签法：在最后一个浮动元素后写一个空标签，设置清除浮动  
+    新标签必须是块级元素
+    + 父元素添加overflow：属性设置hidden|auto|scroll  
+    无法显示溢出的部分
+    + :after伪元素法：  
+    ```css
+    .clearfix:after {
+        content: "";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+    ```
+    + 双微元素清除浮动
+    ```css
+    .clearfix:before,.clearfix:after {
+        content: "";
+        display: table;
+        height: 0;
+    }
+    .clearfix:after {
+        clear: both;
+    }
+    .clearfix {
+        *zoom: 1;
+    }
+    ```
