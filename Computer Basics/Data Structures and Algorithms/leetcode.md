@@ -2315,3 +2315,116 @@ def reorganizeString(S):
         prev = (v+1,k)
     return res
 ```
+
+# 303. 区域和检索 - 数组不可变
+给定一个整数数组  nums，求出数组从索引 i 到 j（i ≤ j）范围内元素的总和，包含 i、j 两点。
+
+实现 NumArray 类：
+
+NumArray(int[] nums) 使用数组 nums 初始化对象
+int sumRange(int i, int j) 返回数组 nums 从索引 i 到 j（i ≤ j）范围内元素的总和，包含 i、j 两点（也就是 sum(nums[ i], nums[i + 1], ... , nums[j])）
+
+```python
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.sum = [0]
+        _sums = self.sum 
+        for num in nums:
+            _sums.append(_sums[-1]+num)
+
+    def sumRange(self, i: int, j: int) -> int:
+        _sums = self.sum
+        return _sums[j + 1] - _sums[i]
+```
+1. self.为形参，是类中通用的，会在每个方法中继承
+2. 前缀化、动态规划的思想减少sumRange方法的调用
+
+# 304. 二维区域和检索 - 矩阵不可变
+给定一个二维矩阵，计算其子矩形范围内元素的总和，该子矩阵的左上角为 (row1, col1) ，右下角为 (row2, col2) 。
+
+## 数组累加
+```python
+class NumMatrix:
+
+    def __init__(self, matrix: List[List[int]]):
+        self.sum = 0
+        self.matrix = matrix
+
+
+    def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:
+        sum_ = self.sum
+        for i in range(row1 , row2+1):
+            for j in range(col1 , col2+1):
+                sum_ += self.matrix[i][j]
+        return sum_
+```
+## 二维前缀和
+```python
+class NumMatrix:
+
+    def __init__(self, matrix: List[List[int]]):
+        self.matrix = matrix
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                if i == 0 and j != 0:
+                    self.matrix[i][j] += self.matrix[i][j-1]
+                elif i == 0 and j == 0:
+                    continue
+                elif i != 0 and j == 0:
+                    self.matrix[i][j] += self.matrix[i-1][j]
+                else:
+                    self.matrix[i][j] = self.matrix[i][j] - self.matrix[i-1][j-1] +self.matrix[i][j-1] + self.matrix[i-1][j]
+
+
+
+    def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:
+        if row1 == 0 and col1 == 0:
+            return self.matrix[row2][col2]
+        elif row1 == 0:
+            return self.matrix[row2][col2] - self.matrix[row2][col1 - 1]
+        elif col1 == 0:
+            return self.matrix[row2][col2] - self.matrix[row1 - 1][col2]
+        else:
+            return self.matrix[row2][col2] + self.matrix[row1 - 1][col1 - 1] - self.matrix[row1 - 1][col2] - self.matrix[row2][col1 - 1]
+```
+1. 二维前缀和：大矩形+小矩形-两个边产生的矩形
+2. 动态规划和矩阵的求法
+
+# 给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。
+## 动态规划——最高有效位
+### 记录二进制最高位
+```python
+def countBits(num):
+    list_1 = [0]
+    bit = 1
+    for i in range(1,num+1):
+        if list_1[-1] == bit:
+            list_1.append(1)
+            bit += 1
+        else:
+            list_1.append(list_1[i-2**(bit)]+1)
+    return list_1
+```
+### 优化，记录二进制最高位对应的十进制数
+```python
+def countBits(num):
+    bits = [0]
+    highBit = 0
+    for i in range(1, num + 1):
+        if i & (i - 1) == 0:
+            highBit = i
+        bits.append(bits[i - highBit] + 1)
+    return bits
+```
+## 动态规划——最低有效位
+对于正整数 x，将其二进制表示右移一位，等价于将其二进制表示的最低位去掉,x为偶数则与抹掉最低位bits相同，奇数则+1
+```python
+def countBits(num):
+    bits = [0]
+    for i in range(1, num + 1):
+        a = i >> 1
+        b = i & 1
+        bits.append(bits[i >> 1] + (i & 1))
+    return bits
+```
