@@ -2428,3 +2428,253 @@ def countBits(num):
         bits.append(bits[i >> 1] + (i & 1))
     return bits
 ```
+
+# 354. 俄罗斯套娃信封问题
+给你一个二维整数数组 envelopes ，其中 envelopes[i] = [wi, hi] ，表示第 i 个信封的宽度和高度。
+
+当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
+
+请计算 最多能有多少个 信封能组成一组“俄罗斯套娃”信封（即可以把一个信封放到另一个信封里面）。
+
+注意：不允许旋转信封。
+## 动态规划
+```python
+def maxEnvelopes(envelopes):
+    if not envelopes:
+        return 0
+        
+    n = len(envelopes)
+    envelopes.sort(key=lambda x: (x[0], -x[1]))
+
+    f = [1] * n
+    for i in range(n):
+        for j in range(i):
+            if envelopes[j][1] < envelopes[i][1]:
+                f[i] = max(f[i], f[j] + 1)
+        
+    return max(f)
+```
+1. `envelopes.sort(key=lambda x: (x[0], -x[1]))`按照x[ 0]排序，一致就按照-x[ 1]排序
+2. 在计算信封数的时候采用动态规划
+## 基于二分查找的动态规划
+```python
+def maxEnvelopes(envelopes):
+    if not envelopes:
+        return 0
+        
+    n = len(envelopes)
+    envelopes.sort(key=lambda x: (x[0], -x[1]))
+
+    f = [envelopes[0][1]]
+    for i in range(1, n):
+        if (num := envelopes[i][1]) > f[-1]:
+            f.append(num)
+        else:
+            index = bisect.bisect_left(f, num)
+            f[index] = num
+        
+    return len(f)
+```
+
+# 232. 用栈实现队列
+请你仅使用两个栈实现先入先出队列。队列应当支持一般队列的支持的所有操作（push、pop、peek、empty）：
+
+实现 MyQueue 类：
+
+void push(int x) 将元素 x 推到队列的末尾
+int pop() 从队列的开头移除并返回元素
+int peek() 返回队列开头的元素
+boolean empty() 如果队列为空，返回 true ；否则，返回 false
+```python
+class MyQueue:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.queue = []
+
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+        self.queue.append(x)
+
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+        a = self.queue[0]
+        del(self.queue[0])
+        return a
+
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+        return self.queue[0]
+
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+        return False if self.queue else True
+```
+
+# 2. 两数相加
+给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+
+请你将两个数相加，并以相同形式返回一个表示和的链表。
+
+你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+
+1. 进位
+2. 链表长度不一
+3. 进首位
+
+## 位运算循环
+```python
+def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+    dummy = p = ListNode(None)
+    a = 0
+    while l1 or l2 or a:
+        a += (l1.val if l1 else 0) + (l2.val if l2 else 0)
+        p.next = ListNode(a % 10)
+        p = p.next
+        a //= 10
+        l1 = l1.next if l1 else None
+        l2 = l2.next if l2 else None
+    return dummy.next
+```
+## 位运算递归
+```python
+def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+    def dfs(l, r, i):
+        if not l and not r and not i: return None
+        s = (l.val if l else 0) + (r.val if r else 0) + i
+        node = ListNode(s % 10)
+        node.next = dfs(l.next if l else None, r.next if r else None, s // 10)
+        return node
+    return dfs(l1, l2, 0)
+```
+
+# 503. 下一个更大元素 II
+给定一个循环数组（最后一个元素的下一个元素是数组的第一个元素），输出每个元素的下一个更大元素。数字 x 的下一个更大的元素是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1。
+
+## 暴力法
+```python
+def nextGreaterElements(nums):
+    list1 = []
+    for i in range(len(nums)):
+        j = i+1
+        while j<len(nums):
+            if nums[j] > nums[i]:
+                list1.append(nums[j])
+                break
+            j += 1            
+        if j != len(nums):
+            continue
+        else:
+            j = 0
+            while j<i:
+                if nums[j] > nums[i]:
+                    list1.append(nums[j])
+                    break
+                j += 1  
+            if j != i and i != 0:
+                continue
+            else:
+                list1.append(-1)
+    return list1
+```
+## 单调栈
+```python
+def nextGreaterElements(nums):
+    n = len(nums)
+    ret = [-1] * n
+    stk = list()
+
+    for i in range(n * 2 - 1):
+        while stk and nums[stk[-1]] < nums[i % n]:
+            ret[stk.pop()] = nums[i % n]
+        stk.append(i % n)       
+    return ret
+```
+1. `for i in range(n * 2 - 1)` `nums[i % n]`按序历遍整个列表
+2. 单调栈最上方保存未找到更大元素的最小数的索引，减少单调递减部分的计算资源浪费
+```JavaScript
+var nextGreaterElements = function(nums) {
+    const n = nums.length;
+    const ret = new Array(n).fill(-1);
+    const stk = [];
+    for (let i = 0; i < n * 2 - 1; i++) {
+        while (stk.length && nums[stk[stk.length - 1]] < nums[i % n]) {
+            ret[stk[stk.length - 1]] = nums[i % n];
+            stk.pop();
+        }
+        stk.push(i % n);
+    }
+    return ret;
+};
+```
+1. 创建指定长度指定内容数组的方法`const ret = new Array(n).fill(-1);`
+2. JS数组不支持负索引
+
+# 3. 无重复字符的最长子串
+给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+## 哈希表双指针
+```python
+def lengthOfLongestSubstring(s):
+    n = 0
+    i,j = 0,0
+    dick = {}
+    while j<len(s):
+        if s[j] not in dick:
+            dick[s[j]] = 0
+            j += 1
+            n = max(n,j-i)
+        else:
+            i += 1
+            j = i
+            dick.clear()
+    return n
+```
+## 哈希表双指针优化
+```python
+def lengthOfLongestSubstring(s):
+    n = 0
+    j = 0
+    dick = set()
+    for i in range(len(s)):
+        if i != 0:
+            dick.remove(s[i-1])
+        while j<len(s) and s[j] not in dick:
+            dick.add(s[j])
+            j += 1
+        n = max(n,j-i)
+    return n
+```
+```JavaScript
+var lengthOfLongestSubstring = function(s) {
+    const occ = new Set();
+    const n = s.length;
+    let rk = 0, ans = 0;
+    for (let i = 0; i < n; ++i) {
+        if (i != 0) {
+            occ.delete(s.charAt(i - 1));
+        }
+        while (rk  < n && !occ.has(s.charAt(rk))) {
+            occ.add(s.charAt(rk));
+            ++rk;
+        }
+        ans = Math.max(ans, rk - i);
+    }
+    return ans;
+};
+```
+1. 创建集合`const occ = new Set();`
+2. 字符串索引`字符串名.charAt(索引值)`

@@ -576,3 +576,108 @@ div{
 3. 绝对定位会完全压住盒子
     + 浮动会压住标准流盒子，但不会压住标准流的文字
     + 绝对或者固定定位会压住标准流的文字
+
+
+
+# 元素的显示与隐藏
+
+## display
+1. display属性用于设置一个元素如何显示
+2. `display:none;`隐藏对象，隐藏后元素不占有原先的位置
+3. `display:block;`显示对象；转换为块级元素
+4. 搭配JS可以做很多网页特效
+
+## visibility
+1. visibility属性用于指定一个元素可见还是隐藏
+2. `visibility:visible;`元素可见
+3. `visibility:hidden;`元素隐藏，隐藏后元素占有原先的位置
+
+## overflow
+1. overflow属性指定了内容溢出的元素框时的状态
+2. `overflow:hidden;`溢出内容隐藏
+3. `overflow:scroll;`溢出内容显示滚动条，不溢出的时候也显示滚动条
+4. `overflow:auto;`需要的时候添加滚动条
+5. 对于定位的盒子要慎用，会切掉框架外的内容
+
+
+
+# 精灵图
+1. 精灵技术：将网页中的一些小背景图像整合到一张大图中，减少服务器的接受和发送请求的次数
+
+## 精灵图使用
+1. 主要针对背景图片使用，把多个小的背景图片整合到一张大图中
+2. sprite：精灵图或者雪碧图，集成的大图
+3. 通过移动背景图片的方式选择精灵图中的小图，`background-position`
+4. 往上往左移动为负值
+
+
+
+# 字体图标
+1. 主要用于显示网页中通用、常用的一些小图标
+2. 展示的是一个图标，但本质是文字
+
+## 字体图标优点
+1. 轻量级：一旦加载了，图标会马上渲染出来，减少服务器请求
+2. 灵活性
+3. 兼容性：支持所有浏览器
+
+## 字体图标下载
+1. [icomoon字体库](https://icomoon.io/)
+2. [iconfont字体库](https://www.iconfont.cn/)
+
+## 字体图标引入
+1. 把下载包里面的fonts文件夹放在CSS文件的根目录下
+2. 字体声明
+```CSS
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?p4ssmb');
+  src:  url('fonts/icomoon.eot?p4ssmb#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?p4ssmb') format('truetype'),
+    url('fonts/icomoon.woff?p4ssmb') format('woff'),
+    url('fonts/icomoon.svg?p4ssmb#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+```
+
+## 字体图标追加
+1. 把压缩包里的selection.json重新上传，再下载压缩包替代原文件
+
+
+
+# CSS三角
+
+## 原理
+1. 在宽高都为0的盒子设置border时会产生三角形
+
+## 代码
+```CSS
+div {
+    width: 0;
+    height: 0;
+    border: 50px solid transparent;
+    border-left-color: pink;
+}
+```
+
+## 定位
+1. 子绝父相
+2. 要移动border的两倍
+
+
+
+# 用户界面样式
+1. 界面样式：更改用户操作样式
+
+## 鼠标样式
+1. 设置鼠标在对象上时的光标形状
+2. 语法`选择器 {cursor: pointer}`
+![常见鼠标样式.jpg](https://i.loli.net/2021/03/06/l8j6G5TQZaEtXWb.jpg)
+
+## 表单轮廓线
+1. 取消表单轮廓线 `outline: none;`
+
+## 固定文本域
+2. 防止拖动文本域`resize: none;`
