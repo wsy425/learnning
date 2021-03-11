@@ -2678,3 +2678,321 @@ var lengthOfLongestSubstring = function(s) {
 ```
 1. 创建集合`const occ = new Set();`
 2. 字符串索引`字符串名.charAt(索引值)`
+
+# 131. 分割回文串
+给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。
+返回 s 所有可能的分割方案。
+## 回溯+动态规划预处理
+```python
+def partition(s):
+    n = len(s)
+    f = [[True] * n for _ in range(n)]
+    for i in range(n - 1, -1, -1):
+        for j in range(i + 1, n):
+            f[i][j] = (s[i] == s[j]) and f[i + 1][j - 1]
+    ret = list()
+    ans = list()
+    def dfs(i: int):
+        if i == n:
+            ret.append(ans[:])
+            return        
+        for j in range(i, n):
+            if f[i][j]:
+                ans.append(s[i:j+1])
+                dfs(j + 1)
+                ans.pop()
+    dfs(0)
+    return ret
+```
+```JavaScript
+var partition = function(s) {
+    const n = s.length
+    if (n === 0) return []
+    const res = [], dp = Array.from({ length: n }, () => Array(n).fill(0))
+    for(let i = n - 1; i >= 0; i--) { // 动规
+        for (let j = i; j < n; j++) {
+            dp[i][j] = s[i] === s[j] && (j - i < 2 || dp[i+1][j-1])
+        }
+    }
+    function bt(path, start) { // 回溯
+        if (start === n) res.push([...path])
+        for(let i = start; i < n; i++) {
+            if (!dp[start][i]) continue
+            path.push(s.substring(start, i + 1))
+            bt(path, i + 1)
+            path.pop()
+        }
+    }
+    bt([], 0)
+    return res
+};
+```
+
+# 11. 盛最多水的容器
+给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+说明：你不能倾斜容器。
+## 双指针+博弈论优化
+```python
+def maxArea(self, height: List[int]) -> int:
+    i, j, res = 0, len(height) - 1, 0
+    while i < j:
+        if height[i] < height[j]:
+            res = max(res, height[i] * (j - i))
+            i += 1
+        else:
+            res = max(res, height[j] * (j - i))
+            j -= 1
+    return res
+```
+1. 双指针确定边界
+2. 哪边短缩哪边来优化计算次数
+```JavaScript
+var maxArea = function(height) {
+    let i = 0; j = height.length-1; 
+    let res = 0; square = 0;
+    while (i < j){
+        if (height[i] < height[j]){
+            square = height[i] * (j - i);
+            i ++;
+        }else{
+            square = height[j] * (j - i);
+            j --;
+        }
+        res = Math.max(res , square);
+    }
+    return res
+};
+```
+
+# 1047. 删除字符串中的所有相邻重复项
+给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。
+
+在 S 上反复执行重复项删除操作，直到无法继续删除。
+
+在完成所有重复项删除操作后返回最终的字符串。答案保证唯一。
+
+## 单指针
+```python
+def removeDuplicates(S):
+    i = 0
+    while i<len(S) - 1:
+        if S[i] == S[i+1]:
+            S = S[:i] + S[i+2:]
+            if i != 0:
+                i -= 2
+            else:
+                i -= 1
+        i += 1
+    return S
+```
+
+## 栈
+```python
+def removeDuplicates(S):
+    stk = []
+    st = ''
+    for i in range(len(S)):
+        if stk and stk[-1] == S[i]:
+            del stk[-1]
+        else:
+            stk.append(S[i])
+    for s in stk:
+        st += s
+    return st
+```
+### 栈优化
+```python
+def removeDuplicates(S):
+    stk = list()
+    for ch in S:
+        if stk and stk[-1] == ch:
+            stk.pop()
+        else:
+            stk.append(ch)
+    return "".join(stk)
+```
+1. `.pop()`直接出栈最后一位
+2. `"".join(stk)`用“”将stk内容拼接起来
+```JavaScript
+var removeDuplicates = function(S) {
+    let stk = [];
+    for (let i = 0;i<S.length;i++){
+        if(stk && stk[stk.length - 1] == S.charAt(i)){
+            stk.pop();
+        }else{
+            stk.push(S.charAt(i));
+        }
+    }
+    return stk.join('');
+};
+```
+
+# 15. 三数之和
+给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+## 排序+双指针
+1. 题目的关键在于不能包含重复三元组
+```python
+def threeSum(nums):     
+    n=len(nums)
+    res=[]
+    if(not nums or n<3):
+        return []
+    nums.sort()
+    res=[]
+    for i in range(n):
+        if(nums[i]>0):
+            return res
+        if(i>0 and nums[i]==nums[i-1]):
+            continue
+        L=i+1
+        R=n-1
+        while(L<R):
+            if(nums[i]+nums[L]+nums[R]==0):
+                res.append([nums[i],nums[L],nums[R]])
+                while(L<R and nums[L]==nums[L+1]):
+                    L=L+1
+                while(L<R and nums[R]==nums[R-1]):
+                    R=R-1
+                L=L+1
+                R=R-1
+            elif(nums[i]+nums[L]+nums[R]>0):
+                R=R-1
+            else:
+                L=L+1
+    return res
+```
+
+# 224. 基本计算器
+实现一个基本的计算器来计算一个简单的字符串表达式 s 的值。
+## 栈
+```python
+def calculate(s):
+    ops = [1]
+    sign = 1
+
+    ret = 0
+    n = len(s)
+    i = 0
+    while i < n:
+        if s[i] == ' ':
+            i += 1
+        elif s[i] == '+':
+            sign = ops[-1]
+            i += 1
+        elif s[i] == '-':
+            sign = -ops[-1]
+            i += 1
+        elif s[i] == '(':
+            ops.append(sign)
+            i += 1
+        elif s[i] == ')':
+            ops.pop()
+            i += 1
+        else:
+            num = 0
+            while i < n and s[i].isdigit():
+                num = num * 10 + ord(s[i]) - ord('0')
+                i += 1
+            ret += num * sign
+    return ret
+```
+1. `.isdigit()`检测字符串是否只由数字组成
+```JavaScript
+var calculate = function(s) {
+    const ops = [1];
+    let sign = 1;
+
+    let ret = 0;
+    const n = s.length;
+    let i = 0;
+    while (i < n) {
+        if (s[i] === ' ') {
+            i++;
+        } else if (s[i] === '+') {
+            sign = ops[ops.length - 1];
+            i++;
+        } else if (s[i] === '-') {
+            sign = -ops[ops.length - 1];
+            i++;
+        } else if (s[i] === '(') {
+            ops.push(sign);
+            i++;
+        } else if (s[i] === ')') {
+            ops.pop();
+            i++;
+        } else {
+            let num = 0;
+            while (i < n && !(isNaN(Number(s[i]))) && s[i] !== ' ') {
+                num = num * 10 + s[i].charCodeAt() - '0'.charCodeAt();
+                i++;
+            }
+            ret += sign * num;
+        }
+    }
+    return ret;
+};
+
+```
+
+# 227. 基本计算器 II
+给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
+
+整数除法仅保留整数部分。
+## 用栈保存中间结果
+```python
+def calculate(s):
+    stk = []
+    num = 0
+    sign = '+'
+    for i , each in enumerate(s):
+        if each.isdigit():
+            num = num * 10 + int(each)
+        if i == len(s) - 1 or each in '+-*/':
+            if sign == '+':
+                stk.append(num)
+            elif sign == '-':
+                stk.append(-num)
+            elif sign == '*':
+                stk.append(stk.pop() * num)
+            elif sign == '/':
+                top = stk.pop()
+                if top < 0:
+                    stk.append(int(top / num))
+                else:
+                    stk.append(top // num)
+            sign = each
+            num = 0
+    return sum(stk)
+calculate("3+2*2")
+```
+1. sign保存当前位置之前最近的运算符，确定当前位置之前数字存储到栈中的运算
+2. 当sign为乘除时，把栈最顶端的数字与现在累积的数字num进行相应运算
+3. 其中//取整在负数时会向上取整，不符合
+4. 因为sign是之前的运算符，所以会存在最后一个运算符未被考虑的问题，故要对条件进行处理
+
+# 16. 最接近的三数之和
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+```python
+def threeSumClosest(nums, target):
+    nums.sort()
+    pivot,res,i = abs(sum(nums[:3])-target),sum(nums[:3]),0
+    def getRes(a,b,c,target):
+        return a+b+c-target,a+b+c
+    while i<len(nums):
+        if i>0 and nums[i]==nums[i-1]: 
+            i +=1
+            continue
+        l,r = i+1,len(nums)-1
+        while l<r:
+            distance,sumNum = getRes(nums[i],nums[l],nums[r],target)
+            if abs(distance)<pivot:
+                pivot,res = abs(distance),sumNum
+            if pivot==0: return res
+            if distance<0:l+=1
+            else:r-=1
+        i+=1
+    return res
+```

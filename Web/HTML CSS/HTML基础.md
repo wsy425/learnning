@@ -239,3 +239,51 @@
    带有id名字： #
 6. 自增符号： $
 7. 标签默认文字用{}括起来
+
+# HTML5 新标签
+
+## HTML5新增语义化标签
+1. 头部标签`<header>`
+2. 导航标签`<nav>`
+3. 内容标签`<article>`
+4. 定义文档某个区域`<section>`
+5. 侧边栏标签`<aside>`
+6. 尾部标签`<footer>`
+7. 这种语义化的标签主要是针对搜索引擎
+8. 新标签页面中可使用多次
+9. 在IE9中需要把元素转换为块级元素
+10. 移动端更喜欢用
+
+## HTML5新增多媒体标签
+1. 音频标签`<audio>`
+2. 视频标签`<video>`
+
+### 视频标签
+1. 只支持三种视频格式：MP4;WebM；Ogg
+2. 尽量使用MP4
+3. 语法`<video src="文件地址" controls="controls"></video>`
+```HTML
+<video width="320" height="240" controls>
+    <source src="movie.mp4" type="video/mp4">
+    <source src="movie.ogg" type="video/ogg">
+    <source src="movie.webm" type="video/webm">
+    <object data="movie.mp4" width="320" height="240">
+        <embed src="movie.swf" width="320" height="240">
+    </object> 
+</video>
+```
+4. 常见属性
+![视频常见属性.jpg](https://i.loli.net/2021/03/09/6bJMcTtvLQrsouz.jpg)
+
+### 音频标签
+1. 只支持三种音频格式：MP3;Wav;Ogg
+2. 都支持MP3
+3. 语法`<audio src="文件地址" controls="controls"></audio>`
+4. 常见属性
+![音频常见属性.jpg](https://i.loli.net/2021/03/09/8KMULaAo41VZ7Ss.jpg)
+
+## HTML新增input类型
+![input常见类型.jpg](https://i.loli.net/2021/03/11/x9FTJQz1rdEcnyq.jpg)
+
+## HTML新增表单属性
+![新增表单属性.jpg](https://i.loli.net/2021/03/11/7n6vgFai32RCPlk.jpg)

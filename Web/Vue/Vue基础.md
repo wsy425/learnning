@@ -119,4 +119,114 @@ var app = new Vue({
 </script>
 ```
 
-## 计数器
+## v-show
+1. 根据表达式的真假切换元素的显示和隐藏
+2. 原理是修改元素的display实现显示隐藏
+3. 指令后面的内容都为解析为布尔值
+4. 值为true显示；false隐藏
+5. 数据改变后，对应元素显示状态同步更新
+```HTML
+    <div id="app">
+      <input type="button" value="切换显示状态" @click="changeIsShow">
+      <input type="button" value="累加年龄" @click="addAge">
+      <!-- v-show输入数据 -->
+      <img v-show="isShow" src="pic.png" alt="">
+      <!-- v-show输入表达式 -->
+      <img v-show="age>=18" src="pic.png" alt="">
+    </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    var app = new Vue({
+        el: '#app',
+        data:{
+          isShow: false,
+          age: 17
+        },
+        methods:{
+          changeIsShow:function(){
+            this.isShow = !this.isShow;
+          },
+          addAge:function(){
+            this.age++;
+          }
+        }
+      })
+```
+
+## v-if
+1. 根据表达值的真假切换元素的显示状态（操纵dom元素）
+2. 本质是通过dom元素来切换显示状态
+3. 值为true显示；false隐藏
+4. 频繁切换使用v-show，反之使用v-if；前者切换消耗小
+```HTML
+    <div id="app">
+      <input type="button" value="切换显示状态" @click="changeIsShow">
+      <input type="button" value="累加年龄" @click="addAge">
+      <!-- v-if输入数据 -->
+      <img v-if="isShow" src="pic.png" alt="">
+      <!-- v-if输入表达式 -->
+      <img v-if="age>=18" src="pic.png" alt="">
+    </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    var app = new Vue({
+        el: '#app',
+        data:{
+          isShow: false,
+          age: 17
+        },
+        methods:{
+          changeIsShow:function(){
+            this.isShow = !this.isShow;
+          },
+          addAge:function(){
+            this.age++;
+          }
+        }
+      })
+```
+
+## v-bind
+1. 设置元素的属性
+2. 语法`v-bind:属性名=表达式`
+3. 简写语法`:属性名=表达式`
+4. class属性建议使用对象的方式
+```HTML
+    <style>
+      .active{
+        border:1px solid red;
+      }
+    </style>
+
+    <div id="app">
+        <!-- 设置地址属性 -->
+      <img v-bind:src="imgSrc" alt="">
+      <br>
+      <!-- 简写设置地址属性 -->
+      <!-- 设置title属性，可以使用字符串拼接 -->
+      <!-- 使用三元表达是设置class属性 -->
+      <img :src="imgSrc" alt="" :title="imgTitle='!" :class="isActive?'active':''" @click="toggleActive">
+      <br>
+      <!-- 使用对象的方式设置class属性 -->
+      <img :src="imgSrc" alt="" :title="imgTitle='!" :class="{active:isActive}" @click="toggleActive">
+    </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    var app = new Vue({
+        el: '#app',
+        data:{
+          imgSrc: "pro_07.jpg",
+          imgTitle:"你不知道她的故事",
+          isActive:false
+        },
+        methods: {
+          toggleActive:function(){
+            isActive = !isActive
+          }
+        }
+      })   
+    </script>
+```

@@ -681,3 +681,135 @@ div {
 
 ## 固定文本域
 2. 防止拖动文本域`resize: none;`
+
+
+
+# vertical-align
+1. 图片和表单的垂直居中
+2. 设置元素的垂直对齐方式，只针对行内元素或者行内块元素有效
+3. 语法`vertical-align : 参数`
+4. baseline：默认，元素放置在父元素的基线上
+5. top：顶线对齐
+6. middle：中线对齐
+7. bottom：底线对齐
+
+## 图片底侧空白间隙
+1. vertical-align不选择基线对齐
+2. 把图片转换成块级元素
+
+
+
+# 溢出文字省略号显示
+
+## 单行文本溢出
+1. 强制一行内显示文本`white-space: nowrap;`
+2. 超出部分隐藏`overflow: hidden;`
+3. 文字用省略号替代超出的部分`text-overflow: ellipsis;`
+
+## 多行文本溢出
+1. 有比较大兼容性问题，适合webKit浏览器或移动端
+```CSS
+{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* 弹性伸缩盒子模型显示 */
+    display: -webkit-box;
+    /* 限制在一个块元素显示的文本行数 */
+    -webkit-line-clamp:2;
+    /* 设置或检索伸缩盒对象的子元素排列方式 */
+    -webkit-box-orient: vertical;    
+}
+```
+
+
+
+# 布局技巧
+
+## margin负值运用
+1. 解决盒子边框变粗的问题：向左移动使右边的盒子边框压住左边盒子边框
+2. `margin-left: -1px;`
+3. 在使用这个技巧时，添加hover属性变化，左边的盒子有边框不能展示
+4. 添加相对定位
+5. `position: relative;`
+6. 如果盒子里有定位，则提高盒子的层级
+7. `z-index: 1`
+
+## 文字围绕浮动元素
+1. 巧妙应用浮动元素不会压住文字的技巧
+2. 图片添加浮动，文字为标准流
+
+
+
+# CSS初始化
+
+## 标签内外边距清零
+```CSS
+* {
+    margin: 0;
+    padding: 0;
+}
+```
+
+## 斜体文字不倾斜
+```CSS
+em,
+i {
+    margin: 0;
+    padding: 0;
+}
+```
+
+## 去掉列表格式
+```CSS
+li {
+    list-style: none;
+}
+```
+
+## 图片初始化
+```CSS
+img {
+    border: 0;
+    vertical-align: middle;
+}
+```
+
+## 按钮鼠标样式手
+```CSS
+button {
+    cursor: pointer;
+}
+```
+
+## 链接初始化
+```CSS
+a {
+    color: #666;
+    text-decoration: none;
+}
+a:hover {
+    color:#c81623
+}
+```
+
+## 主页面初始化
+```CSS
+body {
+    /* 文字抗锯齿 */
+    -webkit-font-smoothing: antialiased;
+    background-color: #fff;
+    font: 12px/1.5 Microsoft YaHei
+    color: #666;
+}
+```
+
+## 清除浮动
+```CSS
+.clearfix:after {
+    visibility: hidden;
+    clear: both;
+    display: block;
+    content: ".";
+    height: 0;
+}
+```
