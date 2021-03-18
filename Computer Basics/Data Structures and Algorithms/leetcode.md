@@ -2996,3 +2996,121 @@ def threeSumClosest(nums, target):
         i+=1
     return res
 ```
+
+# 54. 螺旋矩阵
+给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
+
+## 按层模拟
+```python
+def spiralOrder(matrix):
+    m = len(matrix)
+    n = len(matrix[0])
+    f , g = -1,-1
+    s = m*n
+    list1 = [] 
+    while m-f>1 or n-g>1:
+        j = g+1
+        while j < n and len(list1)< s:
+            list1.append(matrix[f+1][j])
+            j += 1
+        f += 1
+        i = f+1
+        while i < m and len(list1)< s:
+            list1.append(matrix[i][n-1])
+            i += 1
+        n -= 1
+        j = n-1
+        while j > g and len(list1)< s:
+            list1.append(matrix[m-1][j])
+            j -= 1
+        m -= 1
+        i = m-1
+        while i > f and len(list1)< s:
+            list1.append(matrix[i][g+1])
+            i -= 1
+        g += 1
+    return list1
+```
+
+# 59. 螺旋矩阵 II
+给你一个正整数 n ，生成一个包含 1 到 n2 所有元素，且元素按顺时针顺序螺旋排列的 n x n 正方形矩阵 matrix 。
+## 矩阵模拟
+```python
+def generateMatrix(n):
+    list1 = [[0 for _ in range(n)] for _ in range(n)]
+    lrl,lll = -1,-1
+    hrl,hll = n,n
+    count = 1
+    while count<n**2+1:
+        for j in range(lll+1,hll):
+            list1[lrl+1][j] = count
+            count += 1
+        lrl += 1
+        for i in range(lrl+1,hrl):
+            list1[i][hll-1] = count
+            count += 1
+        hll -= 1
+        for j in range(hll-1,lll,-1):
+            list1[hrl-1][j] = count
+            count += 1
+        hrl -= 1
+        for i in range(hrl-1,lrl,-1):
+            list1[i][lll+1] = count 
+            count += 1
+        lll += 1
+    return list1
+```
+1. 其中要以`list1 = [[0 for _ in range(n)] for _ in range(n)]`生成矩阵，否则矩阵中相互关联，不能单独赋值
+但不知道为什么
+
+# 115. 不同的子序列
+给定一个字符串 s 和一个字符串 t ，计算在 s 的子序列中 t 出现的个数。
+
+字符串的一个 子序列 是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，"ACE" 是 "ABCDE" 的一个子序列，而 "AEC" 不是）
+
+题目数据保证答案符合 32 位带符号整数范围。
+
+## 动态规划
+```python
+def numDistinct(s, t):
+    m, n = len(s), len(t)
+    if m < n:
+        return 0
+    
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1):
+        dp[i][n] = 1
+    
+    for i in range(m - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            if s[i] == t[j]:
+                dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j]
+            else:
+                dp[i][j] = dp[i + 1][j]
+    
+    return dp[0][0]
+```
+![dp数组推导过程](https://pic.leetcode-cn.com/1610941567-hFgPVa-file_1610941567061)
+
+# 92. 反转链表 II
+给你单链表的头指针 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
+```python
+def reverseBetween(self, head, left, right):
+    count = 1
+    dummy = ListNode(0)
+    dummy.next = head
+    pre = dummy
+    while pre.next and count < left:
+        pre = pre.next
+        count += 1
+    cur = pre.next
+    tail = cur
+    while cur and count <= right:
+        nxt = cur.next
+        cur.next = pre.next
+        pre.next = cur
+        tail.next = nxt
+        cur = nxt
+        count += 1
+    return dummy.next
+```

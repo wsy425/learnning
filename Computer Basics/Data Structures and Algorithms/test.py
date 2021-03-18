@@ -1,27 +1,24 @@
-def threeSumClosest(nums, target):
-    nums.sort()
-    res = nums[0] + nums[1] + nums[-1] - target
-    for i in range(len(nums)-2):
-        L = i + 1
-        R = len(nums) - 1
-        pre = nums[0] + nums[L] + nums[R] - target 
-        while L < R:
-            sums = nums[i] + nums[L] + nums[R] - target
-            if sums == 0:
-                return target
-            if sums * pre < 0 and L != i+1:
-                if abs(sums) < abs(pre):
-                    pre = sums
-                    break
-                else:
-                    break
-            elif sums > 0:
-                R -= 1
-                pre = sums
-            else:
-                L += 1
-                pre = sums 
-        if abs(res) > abs(pre):
-            res = pre
-    return res + target
-threeSumClosest([1,2,5,10,11],12)
+def generateMatrix(n):
+    list1 = [[0 for _ in range(n)] for _ in range(n)]
+    lrl,lll = -1,-1
+    hrl,hll = n,n
+    count = 1
+    while count<n**2+1:
+        for j in range(lll+1,hll):
+            list1[lrl+1][j] = count
+            count += 1
+        lrl += 1
+        for i in range(lrl+1,hrl):
+            list1[i][hll-1] = count
+            count += 1
+        hll -= 1
+        for j in range(hll-1,lll,-1):
+            list1[hrl-1][j] = count
+            count += 1
+        hrl -= 1
+        for i in range(hrl-1,lrl,-1):
+            list1[i][lll+1] = count 
+            count += 1
+        lll += 1
+    return list1
+generateMatrix(3)
