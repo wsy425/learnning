@@ -230,3 +230,10 @@ var app = new Vue({
       })   
     </script>
 ```
+
+## v-for
+1. 根据数据生成列表结构
+2. 数组经常和v-for结合使用
+3. 语法`v-for = "(item,index) in 数据"`
+4. item和index可以结合其他指令一起使用 
+5. 数组长度的更新会同步到页面上，是响应式的
