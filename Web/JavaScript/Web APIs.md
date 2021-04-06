@@ -59,8 +59,55 @@ btn.onclick = function(){
 }
 ```
 ### 执行事件的步骤
-1. 获取事件源
-2. 注册事件（绑定事件）
-3. 添加事件处理程序（采取函数赋值形式）
-4. 常见鼠标事件
+1. 获取事件源`var div = document.querySelector('div')`
+1. 注册事件（绑定事件）`div.onclick`
+2. 添加事件处理程序（采取函数赋值形式）`div.onclick = function(){}`
+3. 常见鼠标事件
 ![常见鼠标事件.jpg](https://i.loli.net/2021/03/05/3Ku6IEfPV5Gg7M2.jpg)
+4. 事件补充
+   + onfocus获取焦点
+   + onblur失去焦点
+
+## 操作元素
+1. 可以不用事件直接使用元素
+### 修改元素内容
+1. element.innerText
+   + 语法`DOM.innerText = 内容`
+   + 不识别HTML标签，里面的标签会直接显示
+   + 可以获取元素的内容，会去除空格和换行
+2. element.innerHTML
+   + 语法`DOM.innerHTML = 内容`
+   + 识别HTML标签
+   + 用的多，是W3C标准
+   + 可以获取元素内容，保留空格和换行
+### 修改元素属性
+1. 语法`DOM.属性 = 内容`
+   + 获取的是内置的属性值，元素本身自带的属性
+2. 第二种得到元素属性的方法`DOM.getAttribute('属性')`
+   + 可以获取自定义属性
+3. 第二种更改元素属性值的方法`DOM.setAttribute('属性','值')`
+   + 主要针对于自定义属性
+4. 移除属性值`DOM.removeAttribute('属性')`
+5. 表单元素操纵
+   + 使用表单自己的属性改变里面的内容
+   + 改变表单值使用value属性
+   + 表单被禁用使用disabled属性
+### 修改样式属性
+1. element.style 行内样式操作
+   + style里的属性采用驼峰命名法
+   + 产生的是行内样式，css权重比较高
+2. element.className 类名样式操作
+   + 将当前元素类名进行修改，是直接替换的
+   + 要添加新的类可以使用+=
+### H5自定义属性
+1. 规定自定义属性以data-开头并赋值
+2. 新增一种获取自定义属性方法`DOM.dataset.data后面的属性名`或者`DOM.dataset[data后面的属性名]`
+3. dataset是一个存放了所有以data开头自定义属性的集合
+4. 自定义属性中有多个-，获取的时候采取驼峰命名法
+
+## 节点操作
+1. 节点至少拥有nodeType节点类型、nodeName节点名称和nodeValue节点值这三个基本属性
+2. nodeType
+   + 元素节点为1
+   + 属性节点为2
+   + 文本节点为3（文本节点包含文字、空格、换行等）
