@@ -142,7 +142,7 @@
 ```HTML
 <style>
     div {
-        font-family = "Microsoft Yahei"；
+        font-family: "Microsoft Yahei"；
     }
 </style>
 <div>想要变微软雅黑的文字</div>
@@ -304,6 +304,11 @@ div{
 1. 语法
 `background-color: 颜色值;`
 2. 默认值：transparent（透明）
+
+## 背景颜色线性渐变
+1. CSS3新增属性
+2. 语法`background: -浏览器私有前缀-linear-gradient(起始方向,颜色1,颜色2,....)`
+3. 必须添加浏览器私有前缀
 
 ## 背景图片
 1. 实际开发常见于logo或者一些装饰性的小图片或者超大的背景图片
@@ -850,7 +855,7 @@ body {
 
 ## CSS3盒子模型
 1. CSS3中可以通过box-sizing来指定盒子模型，有两个值：content-box;border-box
-2. box-sizing默认是content-box，盒子大小=width+padding——border
+2. box-sizing默认是content-box，盒子大小=width+padding+border
 3. box-sizing为border-box时，盒子最终大小为width；但有前提：padding+border< width
 
 ## CSS3滤镜filter
@@ -900,3 +905,216 @@ body {
 4. `transform: scale(1,1)`不变，`transform: scale(2,2)`放大一倍
 5. 如果只写一个参数则默认两个参数一致
 6. 优势：可以设置转换中心点，默认以中心点缩放。而且不影响其他盒子
+#### 2D转换综合写法
+1. 格式`transform:  translate() rotate() scale()`
+2. 顺序会映像转换效果，位移要放在最前面
+
+## CSS3动画
+1. 先定义动画
+2. 再使用动画
+### keyframes定义动画
+1. 语法
+```CSS
+@keyframes 动画名称 {
+    0% {
+        开始的样式
+    }
+    100%{
+        结束的样式
+    }
+}
+```
+2. 动画序列
+   + 0%是动画开始；100%是动画完成。这中柜子就是动画序列
+   + 可以用from to关键字代替0%和100%
+### 元素使用动画
+1. 语法`animation-name:动画名称;animation-duration:持续时间;`
+2. 可以添加多个动画用逗号隔开
+### 动画常见属性
+1. animation-name：动画名字，必须写
+2. animation-duration：动画完成一个周期所需的事件秒或者毫秒，必须写 
+3. animation-timing-function：规定动画的速度曲线，默认ease
+   + ![animation-timing-function值.png](https://i.loli.net/2021/03/31/p89BSVWsI4qU2vu.png)
+   + steps就是分几步完成动画
+4. animation-delay：规定何时开始，默认0
+5. animation-iteration-count：规定动画被播放的次数，默认1；可以选择infinite
+6. animation-direction：规定动画是否在下一周期你想播放，默认是normal；alternate逆播放
+7. animation-fill-mode：规定动画结束后状态，保持forwards；回到其实位置backwards
+8. animation-play-state：规定动画是都正在运行或暂停，默认是running；paused暂停
+### 动画简写属性
+1. 语法`animation:动画名称 持续时间 运动曲线 何时开始 播放次数 是否反方向 动画开始或结束的状态`
+
+
+
+# 移动端基础
+## meta视口标签
+1. 语法`<meta name="viewport" content="width=device-width, user=scalable=no,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">`
+2. 属性说明
+![属性说明.png](https://i.loli.net/2021/03/27/pwEM8zuanek1ql6.png)
+## 二倍图
+1. 由于视网膜屏技术，设计移动端时要放大2倍来设计，防止模糊
+2. 背景缩放background-size：规定背景图像的尺寸
+3. 语法`background-size: 背景图片宽度 背景图片高度;`
+4. 只写一个参数是指定的宽度，高度等比例缩放
+5. cover把背景图像扩展至足够大，使背景图像完全覆盖背景区域，可能有部分背景图片显示不全
+6. contain把图像扩展至最大尺寸，使其宽度和高度完全适应内容区域，可能由部分内容存在空白
+
+
+# 流式布局
+
+# flex布局
+1. 父盒子设为flex布局以后，子元素的float、clear和vertical-align属性将失效
+## flex布局父项常见属性
+### flex-direction
+1. 设置主轴的方向，项目的排列方向
+2. 属性值
+   + row：默认值，从左到右
+   + row-reverse：从右到左
+   + column：从上到下
+   + column-reverse：从下到上
+### justify-content
+1. 设置主轴上的子元素排列方式
+2. 属性值
+   + flex-start：默认值，从头部开始
+   + flex-end：贴着尾部对齐
+   + center：在株洲居中对齐
+   + space-around：平分剩余空间
+   + space-between：先两边贴边再平分剩余空间
+### flex-warp
+1. 设置子元素是否换行
+2. flex布局中默认子元素是不换行的，放不下会缩小子元素
+3. 属性
+   + nowarp：默认，不换行
+   + warp：会换行
+### align-content
+1. 设置侧轴上的子元素排列方式（多行）
+2. 子项出现换行的情况
+3. 属性
+   + flex-start：从上到下
+   + flex-end：从下到上
+   + center：挤在一起居中
+   + space-around：子项在册周平分神域空间
+   + space-between：梓州在侧周先分布两头，再平分神域空间
+   + stretch： 默认值，拉伸
+### align-items
+1. 设置侧轴上的子元素排列方式（单行）
+2. 属性
+   + flex-start：从上到下
+   + flex-end：从下到上
+   + center：挤在一起居中
+   + stretch： 默认值，拉伸
+### flex-flow
+1. flex-direction和flex-warp的连写
+2. 语法`flex-flow: row warp;`
+## flex布局子项常见属性
+### flex属性
+1. 定义子项目分配剩余空间，用flex来表示占多少份数
+2. 语法`flex: 份数;`
+3. 默认是0
+### align-self
+1. 控制子项自己在侧轴上的排列方式
+2. 允许某个项目与其他项目不一样的对其方式
+### order
+1. 定义项目的排列顺序
+2. 数值越小，排列越靠前，默认是0
+
+
+
+# rem适配布局
+## rem基础
+1. rem是一个相对单位（root em）
+2. 其基准是html元素的字体大小
+
+## 媒体查询
+1. 媒体查询（Meida Query）是CSS3新语法
+2. 使用@media查询，可以针对不用的媒体类型定义不同的样式
+3. @media可以针对不同的屏幕粗存设置不同的样式
+4. 重置浏览器大小的过程中，页面也会根据浏览器的宽度和高度重新渲染页面
+5. 语法
+```CSS
+@media 媒体类型 关键字 (媒体特性) {
+}
+```
+6. 媒体类型
+   + all：用于所有设备
+   + print：用于打印机和打印预览
+   + screen：用于电脑屏幕，平板电脑，智能手机
+7. 关键字
+   + and：且
+   + not：非
+   + only：置顶某个特定媒体类型
+8. 媒体特性
+   + width：定义输出设备中页面课件区域的宽度
+   + min-width：定义输出设备中页面最小可见区域宽度
+   + max-width：定义输出设备中页面最大可见区域宽度
+
+## 媒体查询引入资源
+1. 写几套css针对不同的屏幕引入
+2. `<link rel="stylesheet" href="#" media="screen and (min-width: 320px)">`
+
+## less基础
+1. less是CSS的扩展语言，也称为CSS预处理器
+### less变量
+1. 语法`@变量名:值;`
+2. 变量命名规范
+   + 必须有@为前缀
+   + 不能包含特殊字符串
+   + 不能以数字开头
+   + 大小写敏感
+### less嵌套
+1. 子元素的样式直接写在父元素里面
+2. 伪类、交际选择器在内层选择器前面加&
+### less运算
+1. 任何数字、颜色或者变量都可以参与运算（加减乘除）
+2. 除法不能直接使用，需要加括号包含起来
+3. 运算符左右必须用空格隔开
+4. 两数运算只有一个有单位，以有单位的为准
+5. 如果两个数单位不一，最后结果以第一个数的单位为准
+6. 颜色也可以运算
+
+
+
+# 响应式布局
+## 布局容器
+1. 根据屏幕宽度确定布局容器大小，布局容器宽度是确定的
+```CSS
+.container {
+    margin:0 auto;
+}
+/* 超小屏幕 */
+@media screen and (max-width:767px) {
+    .container {
+        width: 100%;
+    }
+}
+/* 小屏幕 */
+@media screen and (min-width:768px) {
+    .container {
+        width: 750px;
+    }
+}
+/* 中等屏幕 */
+@media screen and (min-width:992px) {
+    .container {
+        width: 970px;
+    }
+}
+/* 大屏幕下 */
+@media screen and (min-width:1200px) {
+    .container {
+        width: 1170px;
+    }
+}
+```
+
+## bootstrap使用
+### 创建文件夹结构
+1. 复制Bootstrap相关文件夹
+### 创建html骨架结构
+### 引入相关样式文件
+`<link rel="stylesheet" href="bootstrap/css/文件名">`
+### 书写内容
+1. bootstrap通过类来控制样式
+2. 修改样式的时候注意权重问题
+
+## bootstrap布局容器

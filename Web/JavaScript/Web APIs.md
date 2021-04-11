@@ -111,3 +111,36 @@ btn.onclick = function(){
    + 元素节点为1
    + 属性节点为2
    + 文本节点为3（文本节点包含文字、空格、换行等）
+### 节点层次
+1. 利用DOM树可以把节点划分为不同的层次关系
+2. 父级节点
+   + 语法`DOM.parentNode`
+   + 得到的是离元素最近的父级节点
+3. 子节点
+   + 语法`DOM.childNodes`
+   + 得到的子节点集合，包含元素节点、文本节点等
+   + 要获得里面的元素节点需要专门处理
+   + 子元素节点语法`DOM.children`，不是标准方法
+   + 获取第一个子节点`DOM.firstChild`
+   + 获取最后一个子节点`DOM.lastChild`
+   + 获取第一个子元素节点`DOM.firstElementChild`IE9以上才支持
+   + 获取最后一个子元素节点`DOM.lastElementChild`IE9以上才支持
+4. 兄弟节点
+   + 语法`DOM.nextSibling`，得到下一个兄弟节点，包括文本节点
+   + 语法`DOM.previousSibling`，得到上一个兄弟节点，包括文本节点。找不到则返回null
+   + 语法`DOM.nextElementSibling`，得到下一个元素兄弟节点，找不到则返回null，IE9以上才支持
+   + 语法`DOM.previousElementSibling`，得到上一个元素兄弟节点，找不到则返回null，IE9以上才支持
+### 创建节点
+1. 语法`DOM.createElement('节点名')`
+2. 需要通过添加节点使用
+### 添加节点
+1. `DOM.appendChild(变量)`添加到父节点的子节点的末尾
+2. `DOM.insertBefore(变量,指定元素)`添加到父节点的指定子节点的前面
+### 删除节点
+1. `DOM.removeChild(子节点)`从DOM中删除子节点
+### 复制节点
+1. `DOM.cloneNode()`返回调用该方法节点的一个副本
+2. 需要通过添加节点使用
+3. 括号参数
+   + 空或者false，则是浅拷贝。只克隆复制节点本身，不克隆里面的子节点
+   + true，则是深拷贝。隆复制节点本身和里面的子节点

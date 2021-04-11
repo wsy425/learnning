@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>动态控制div显示</title>
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrapSwitch.css" rel="stylesheet">
+    <!--div_1 div_2 background color set-->
+    <style>
+        #div_1 {
+            background-color: #CD661D;
+            height: 100px
+        }
+
+        #div_2 {
+            background-color: #8DB6CD;
+            height: 100px
+        }
+    </style>
+</head>
+
+<body>
+    <script src="./js/jquery-3.1.1.min.js"></script>
+    <script src="./js/bootstrap.js"></script>
+    <script src="./js/bootstrapSwitch.js"></script>
+    <div class="container">
+        <div id="switch_1" class="switch" data-on="primary" data-off="info">
+            <input type="checkbox" checked />
+        </div>
+    </div>
+
+    <div id="div_1" class="container">
+
+    </div>
+
+    <div id="div_2" class="container">
+
+    </div>
+    <!--触动开关的按钮-->
+    <script>
+        $('#switch_1').on('switch-change', function (e, data) {
+            var $el = $(data.el), value = data.value;
+            if (value) {
+                $("#div_1").show();
+            }
+            else {
+                $("#div_1").hide();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
