@@ -131,8 +131,14 @@ btn.onclick = function(){
    + 语法`DOM.nextElementSibling`，得到下一个元素兄弟节点，找不到则返回null，IE9以上才支持
    + 语法`DOM.previousElementSibling`，得到上一个元素兄弟节点，找不到则返回null，IE9以上才支持
 ### 创建节点
-1. 语法`DOM.createElement('节点名')`
-2. 需要通过添加节点使用
+1. `document.write('标签')`
+   + 文档执行完毕会导致页面全部重绘，会重新创建新的页面
+2. `DOM.createElement('节点名')`
+   + 需要通过添加节点使用
+   + 创建新元素，效率高
+3. `DOM.innerHTML = '标签'`
+   + 本质是拼接字符串，效率低
+   + 但如果使用数组拼接，效率最高
 ### 添加节点
 1. `DOM.appendChild(变量)`添加到父节点的子节点的末尾
 2. `DOM.insertBefore(变量,指定元素)`添加到父节点的指定子节点的前面
@@ -144,3 +150,36 @@ btn.onclick = function(){
 3. 括号参数
    + 空或者false，则是浅拷贝。只克隆复制节点本身，不克隆里面的子节点
    + true，则是深拷贝。隆复制节点本身和里面的子节点
+
+## 事件高级
+### 注册事件
+#### 传统方式
+1. 利用on开头的事件
+2. 特点：注册事件的唯一性
+3. 同一个元素同一个事件只能设置一个处理函数，最后注册的处理函数将会覆盖前面注册的处理函数
+#### 方法监听
+1. w3c标准 推荐方式
+2. `DOM.addEventListener(type,listener[,useCapture])`是一个方法
+3. 同一个元素同一个事件可以注册多个监听器
+4. type：事件类型字符串，比如click、mouseover，注意不要带on
+5. listener：事件处理函数，事件发生时，会调用该监听函数
+   + 如果是写调用函数的名字，不需要加()
+6. useCapture：可选参数，是一个布尔值，默认false
+### 删除事件
+#### 传统方式
+1. `DOM.onclick = null;`
+#### 方法监听
+1. `DOM.removeEventListener(type,listener[,useCapture])`
+### DOM事件流
+1. 事件流描述的是从页面中接收事件的顺序
+2. 事件发生时会在元素节点之间按照特定的顺序传播，这个传播过程即DOM事件流
+3. 分成三个阶段：捕获阶段、当前目标阶段和冒泡阶段
+   + 捕获：由DOM最顶层节点开始，逐级向下传播到最具体的元素接收的过程
+   + 目标
+   + 冒泡：事件开始时由最具体的元素接收，然后逐层向上传播到DOM最顶层节点的过程
+4. JS代码只能执行捕获或者冒泡其中的一个阶段
+5. onclick和attachEvent只能得到冒泡阶段
+6. addEventListener(type,listener[ ,useCapture])
+   + 第三个参数如果是true，表示在事件捕获阶段调用事件处理程序
+   + false表示在事件冒泡阶段调用事件处理
+7. 有些事件是没有冒泡的，比如onblur、onfocus、onmouseenter、onmouseleave
