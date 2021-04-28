@@ -208,3 +208,113 @@ btn.onclick = function(){
 4. e.pageY：返回鼠标相对于文档页面的Y坐标（ie9+支持）
 5. e.screenX：返回鼠标相对于电脑屏幕的X坐标
 6. e.screenY：返回鼠标相对于电脑屏幕的Y坐标
+### 常用键盘事件
+1. DOM.onkeyup：某个键盘按键被松开时触发，不区分大小写
+2. DOM.onkeydown：某个键盘按键被按下时触发，不区分大小写
+3. DOM.onkeypress：耨个键盘按键被按下时触发（不能识别功能键），区分大小写
+4. 三个事件的执行顺序，先执行down再执行press最后执行up
+### 键盘事件对象
+1. e.keyCode：返回按键对应的ASCII码值，不区分大小写时是输出大写的ASCII码
+
+
+
+# BOM
+
+## BOM相关概念
+1. BOM（Browser Object Model）浏览器对象模型，它提供了独立于内容而与浏览器进行交互的对象，其核心对象是window
+2. BOM由一系列对象构成，并且每个对象都提供了很多方法与属性
+3. BOM缺乏标准，JavaScript语法的标准化祖师是ECMA，DOM的标准化组织是W3C，BOM最初是Netscape浏览器标准的一部分
+### BOM的构成
+1. BOM比DOM更大，包含DOM
+2. window：
+   + document
+   + location
+   + navigation
+   + screen
+   + history
+3. window对象是浏览器的顶级对象，具有双重角色
+   + 是JS访问浏览器窗口的一个接口
+   + 是一个全局对象，定义在全局作用域中的变量、函数都会变成window对象的属性和方法。调用的时候可以省略window
+
+## window对象常见事件
+### 窗口加载事件
+1. 语法`window.onload = function(){}`或者`window.addEventListener("load",function(){})`
+2. window.onload是窗口加载事件，当文档内容完全加载完成才会触发该事件
+3. 有了window.onload就可以吧JS代码写到页面元素的上方
+4. window.onload传统注册事件方式只能写一次，如果有多个会以最后一个为准
+5. 如果使用addEventListener没有个数限值
+6. 有一个类似的事件`document.addEventListener('DOMContentLoaded',function(){})`，仅当DOM加载完成，不包括样式表，图片，flash等，ie9以上才支持
+### 调整窗口大小事件
+1. 语法`window.onresize = function(){}`或者`window.addEventListener("resize",function(){})`
+2. window.onresize是调整窗口大小加载事件
+3. 只要窗口大小发生像素变化，就会触发这个事件
+4. 经常利用这个事件完成响应式布局。window.innerWidth属性对应当前屏幕的宽度
+
+## 定时器
+### 两种定时器
+1. setTimeout()
+2. setInterval()
+### setTimeout()
+1. 语法`window.setTimeout(调用函数,[延迟的毫秒数])`
+2. 用于设置一个定时器，该定时器在定时器到期后执行调用函数
+3. 延时时间单位是毫秒，单位不用写。整体可以省略，默认是0
+4. 调用函数可以直接写函数，也可以写函数名，还可以写`函数名()`但不推荐
+5. 页面中会存在很多定时器，需要给定时器加标识符
+6. setTimeout里的调用函数也称为回调函数callback。这个函数需要等待事件，时间到了才去调用这个函数
+### 停止setTimeout()定时器
+1. 语法`window.clearTimeout(timeout ID)`
+2. clearTimeout()方法取消了先前通过调用setTimeout()建立的定时器
+3. window可以省略
+4. 括号里面的是定时器的标识符
+### setInterval()
+1. 语法`window.setInterval(调用函数,[间隔的毫秒数])`
+2. setInterval()方法重复调用一个函数，每隔一段时间就去调用一次回调函数
+### 停止setInterval()定时器
+1. 语法`window.clearInterval(interval ID)`
+2. 与停止setTimeout一致
+### this
+1. 函数定义的时候无法确认，函数被调用的时候才能确定this指向谁，一般指向调用它的对象
+2. 全局作用域或者普通函数中this指向全局对象window
+3. 定时器里面的this指向window
+4. 在方法中this指向方法
+5. 构造函数中this指向构造函数的实例
+
+## JS执行队列
+### JS是单线程
+1. JavaScript语言的一大特点是单线程，就是同一个时间只能做一件事
+2. 是因为JavaScript是为了操作DOM，必须先添加再删除，所以必须是单线程
+3. 单线程意味着所有任务需要排队，带来的问题是JS执行时间过长，页面渲染不连贯，导致页面渲染加载阻塞的感觉
+### 同步和异步
+1. 为了解决JS执行过长渲染不连贯的问题，利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，JS出现同步和异步
+2. 同步：前一个任务结束后再执行后一个任务，程序的执行顺序与任务的排列顺序是一致的、同步的
+3. 异步：在做一件事的同事还可以处理其他的事情
+4. JS把任务分成两种
+   + 同步任务：同步任务都在主线程上执行，形成一个执行栈
+   + 异步任务：JS的异步任务是通过回调函数实现的
+   + 常见的异步任务
+      - 普通事件，click、resize
+      - 资源加载，load、error
+      - 定时器，setInterval、setTimeout
+   + 异步任务相关回调函数添加到任务队列中（任务队列也叫消息队列）
+### JS执行机制
+1. 先执行执行栈中的同步任务
+2. 遇到回调函数把异步任务放入任务队列中
+3. 一旦执行栈中的所有同步任务执行完毕，系统就会按次序速去任务队列中的异步任务，于是被读取的异步任务结束等待状态，进入执行栈，开始执行
+4. 事件循环(event loop)：由于主线程不断的重复获得任务、执行任务的机制
+
+## location对象
+1. window对象给我们提供了一个location属性用于获取或设置窗体的URL，并且可以用于解析URL
+2. 因为这个属性返回的是一个对象，所以将这个属性称为location对象
+### URL
+1. 统一资源定位符是互联网上标准资源的地址
+2. 一般语法格式`protocol://host[:port]/path/[?query]#fragment`
+3. protocol:通信协议 常用的http，ftp，maito等
+4. host：主机(域名)
+5. port：端口号，可选，省略时使用方案的默认端口
+6. path：路径，由零活多个'/'符号隔开的字符串，一般用来表示主机上的一个目录或文件地址
+7. query：参数，以键值对的相识，通过&符号分隔开
+8. fragment:片段，#后面内容常见于连接锚点
+### location对象的属性
+![location常见属性.png](https://i.loli.net/2021/04/28/uHX4yLh3GMZF7qt.png)
+### location对象的方法
+![location常见方法.png](https://i.loli.net/2021/04/28/TJDAL6keQuSCXwy.png)
