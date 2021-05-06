@@ -318,3 +318,44 @@ btn.onclick = function(){
 ![location常见属性.png](https://i.loli.net/2021/04/28/uHX4yLh3GMZF7qt.png)
 ### location对象的方法
 ![location常见方法.png](https://i.loli.net/2021/04/28/TJDAL6keQuSCXwy.png)
+
+## navigator对象
+1. navigator对象包含浏览器的相关信息
+2. navigator对象最常用的属性是userAgent，返回有客户机发送服务器的user-agent头部值
+
+## history对象
+1. window对象提供一个history对象，与浏览器历史记录进行交互。该对象包含用户（在浏览器窗口中）
+2. back()：后退功能
+3. forward()：前进功能
+4. go(参数)：前进后退功能。参数是1前进1个页面，-1后退1个页面
+
+
+
+# PC网页特效
+
+## 元素偏移量offset系列
+1. 使用offset系列相关属性可以动态地得到该元素的位置、大小
+2. 获得元素距离带有定位父元素的位置
+3. 获得元素自身的大小（宽度高度）
+4. 返回的数值不带单位
+### offsetLeft与offsetTop
+1. 各自返回元素相对于有定位父元素的上方、左边偏移量
+2. 如果没有定位的父元素，则以body为准
+### offsetWidth与offsetHeight
+1. 各自返回元素包括padding、边框、内容区的宽度、高度
+### offsetParent
+1. 返回该元素带有定位的父级元素
+2. 父级都没有定位则返回body
+### offset与style区别
+1. offset
+   + 可以得到任意样式表中的样式值
+   + 获得的数值没有段位
+   + offsetWidth包含padding、border和width
+   + 只能读属性不能赋值
+   + 更合适获取元素大小位置
+2. style
+   + 只能得到行内样式表中的样式值
+   + 获得带有单位的字符串
+   + style.width不包含padding和border
+   + 可读写属性
+   + 更适合给元素赋值
