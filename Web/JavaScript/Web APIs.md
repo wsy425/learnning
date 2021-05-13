@@ -332,21 +332,21 @@ btn.onclick = function(){
 
 
 # PC网页特效
-
-## 元素偏移量offset系列
+## 元素三大系列
+### 元素偏移量offset系列
 1. 使用offset系列相关属性可以动态地得到该元素的位置、大小
 2. 获得元素距离带有定位父元素的位置
 3. 获得元素自身的大小（宽度高度）
 4. 返回的数值不带单位
-### offsetLeft与offsetTop
+#### offsetLeft与offsetTop
 1. 各自返回元素相对于有定位父元素的上方、左边偏移量
 2. 如果没有定位的父元素，则以body为准
-### offsetWidth与offsetHeight
+#### offsetWidth与offsetHeight
 1. 各自返回元素包括padding、边框、内容区的宽度、高度
-### offsetParent
+#### offsetParent
 1. 返回该元素带有定位的父级元素
 2. 父级都没有定位则返回body
-### offset与style区别
+#### offset与style区别
 1. offset
    + 可以得到任意样式表中的样式值
    + 获得的数值没有段位
@@ -359,3 +359,56 @@ btn.onclick = function(){
    + style.width不包含padding和border
    + 可读写属性
    + 更适合给元素赋值
+### 元素可视区client系列
+1. 使用client系列的相关属性可以动态得到元素边框大小、元素大小等
+#### clientTop与clientLeft
+1. 各自返回元素包括上边、左边边框大小
+#### clientWidth与clientHight
+1. 各自返回元素包括padding、内容区的宽度、高度
+2. 与offset最大的区别就是不包含边框大小
+### 元素滚动scroll系列
+1. 使用scroll系列的相关属性可以动态地得到该元素的大小、滚动距离等
+2. 滚动条滚动会触发onscroll事件
+3. 页面的滚动距离使用`window.pageXOffset`获得
+#### scrollTop与scrollLeft
+1. 各自返回被卷去的上侧、左侧距离
+2. 返回数值不带单位
+#### scrollWidth与scrollHight
+1. 各自返回自身实际宽度、高度，不含边框
+2. 返回数值不带单位
+3. 返回的是包含内容overflow的大小
+### 立即执行函数
+1. 不需要调用，立马能够自己执行的函数
+2. 语法1`(function() {})()`
+3. 语法2`(function() {}())`
+4. 立即执行函数最大的作用是独立创建了一个作用域
+5. 所有变量都是局部变量，不存在命名冲突
+### moseenter和mouseover区别
+#### mouseenter
+1. 当鼠标移动到元素上时会触发mouseenter事件
+2. mouseenter只在经过自身盒子时触发
+3. 不会有冒泡的概念
+4. 搭配使用的是mouseleave，同样不会冒泡
+#### mouseover
+1. 当鼠标移动到元素上时会触发mouseover事件
+2. 不仅经过自身盒子会触发，经过子盒子也会触发
+
+## 动画函数
+### 动画实现原理
+通过定时器setInterval()不断移动盒子位置
+1. 获得盒子当前的位置
+2. 让盒子在当前位置上加移动距离
+3. 加一个结束定时器的条件
+4. 注意此元素需要添加定位，才能使用element.style.left
+### 动画函数简单封装
+1. 函数需要传递2个参数，动画对象和移动到的距离
+### 缓动动画
+1. 原理：让元素运动有所变化，最常见的是让速度慢慢停下
+2. 核心算法：每次移动步长=Math.ceil/floor((目标值-现在的位置)/10)
+### 动画函数添加回调函数
+1. 回调函数原理：函数作为一个参数。将这个函数作为参数传到另一个函数里面，当那个函数执行完之后，再执行传进去的这个函数，这个过程叫做回调
+2. 可以把函数当做一个参数输入另一个函数中
+### 动画函数封装
+1. 单独创建一个JS文件
+2. 把函数写在里面
+3. 在html中引入JS文件
