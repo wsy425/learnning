@@ -51,9 +51,9 @@
     `\t`:制表符，一个tab
     `\n`:换行符，换行
 3. 删除空白
-`rstrip()`:暂时删除字符串末尾空白
-`lstrip()`:暂时删除字符串开头空白
-`strip()`:暂时删除字符串两端空白
+   + `rstrip()`:暂时删除字符串末尾空白
+   + `lstrip()`:暂时删除字符串开头空白
+   + `strip()`:暂时删除字符串两端空白
 
 ## 历遍字符串
 ```python
@@ -68,6 +68,7 @@ for i , n in enumerate(s):
 ## 创建列表
 1. 空列表`列表名 = []`
 2. 赋值列表`列表名 = [元素1 , 元素2]`
+3. 乘法赋值`列表名 = [元素]*列表长度`
 
 ## 访问列表
 1. 通过索引访问值`列表名[索引值]`
@@ -927,14 +928,14 @@ unittest.main()
 2. 创建一个类，用于包含一系列针对get_formatted_name()的单元测试，这个类必须继承unittest.TestCase类
 3. assertEqual()断言方法：核实结果是否与期望的结果一致
 ## 断言方法
-| 序号 | 断言方法 | 断言描述 |
-| :----: | ----: | :----: |
-| 1 | assertEqual(a, b, msg=None) | 验证a = b |
-| 2 | assertNotEqual(a, b, msg=None) | 验证a != b |
-| 3 | assertTrue(x, msg=None) | 验证x是true|
-| 4 | assertFalse(x, msg=None) | 验证x是false|
-| 5 | assertIsInstance(obj, cls, msg=None) | 验证obj是cls的实例|
-| 6 | assertIn(arg1, arg2, msg=None) | 验证arg1是arg2的子串|
+| 序号  |                             断言方法 |       断言描述       |
+| :---: | -----------------------------------: | :------------------: |
+|   1   |          assertEqual(a, b, msg=None) |      验证a = b       |
+|   2   |       assertNotEqual(a, b, msg=None) |      验证a != b      |
+|   3   |              assertTrue(x, msg=None) |     验证x是true      |
+|   4   |             assertFalse(x, msg=None) |     验证x是false     |
+|   5   | assertIsInstance(obj, cls, msg=None) |  验证obj是cls的实例  |
+|   6   |       assertIn(arg1, arg2, msg=None) | 验证arg1是arg2的子串 |
 ## 测试类
 ```python
 import unittest

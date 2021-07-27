@@ -141,6 +141,12 @@ var 变量名1 = 值,
 1. 指的是里面的值不可变，虽然看上去可以改变内容，但其实是地址变了，内存中新开辟了一个内存空间
 2. 因为字符串的不可变不要大量拼接字符串
 
+## ES5新增字符串方法
+### trim()
+1. 从字符串的两端删除空白字符
+2. 语法`str.trim()`
+3. 不影响原字符串本身，返回的是一个新的字符串
+
 
 
 # 布尔型Boolean
@@ -400,6 +406,25 @@ do {
 2. 返回被删除的新数组
 3. 会影响原数组
 
+## ES5数组新增方法
+### 遍历方法
+#### forEach()
+1. 语法`数值名.forEach(function(value,index,array){})`
+2. value：数组当前项的值
+3. index：数组当前项的索引
+4. array：被遍历的数组本身
+5. 在forEach里面return不会终止迭代
+#### filter()
+1. 语法`数值名.filter(function(value,index,array){})`
+2. filter方法用于创建一个新的数组，新数组中的元素是通过检测指定数组中符合条件的所有元素，主要用于筛选数组
+3. 返回的是一个新数组
+#### some()
+1. 语法`数值名.some(function(value,index,array){})`
+2. some方法用于检测数组中断额元素是否满足指定条件
+3. 返回的是一个布尔值。如果查到这个元素，就返回true；如果查不到就返回false
+4. 如果找到第一个满足条件的元素，则终止循环，不再继续查找
+5. 在some里面return true会终止迭代
+
 
 
 # 函数
@@ -575,6 +600,17 @@ for (var k in obj) {
 }
 ```
 
+## ES5新增方法
+### Object.definerProperty()
+1. 定义对象中新属性或修改原有的属性
+2. 语法`Object.definerProperty(目标对象,属性名,descriptor)`
+3. descriptor表示目标属性所拥有的特性，需要以对象形式书写
+4. descriptor四个属性
+   + value：设置属性的值，默认为undefined
+   + writable：值是否可以重写，默认为false
+   + enumerable：目标属性是否可以被枚举，默认为false，不允许该属性被遍历出来
+   + configurable：目标属性是否可以被删除或是否可以再次修改特性，默认为false
+
 
 
 # 内置对象
@@ -726,7 +762,7 @@ class 类名 {
 
 
 # 构造函数和原型
-面试重点
+**面试重点**
 ## 构造函数
 1. 构造函数是一种特殊的函数，主要用来初始化对象。总和new一起使用
 2. 构造函数用于创建某一类对象，其首字母大写
@@ -778,3 +814,56 @@ class 类名 {
 ## 扩展内置对象
 1. 通过原型对象，对原来的内置对象进行扩展自定义的方法
 2. 数组和字符串内置对象不能给原型对象覆盖操作`Array.prototype = {}`，只能是`Array.prototype.XXX = function(){}`的方式
+
+
+
+# 继承
+1. ES6之前没有给我们提供extends继承。通过构造函数+原型对象模拟实现继承，被称为**组合继承**
+
+## call()
+1. 调用这个函数，并且修改函数运行时的this指向
+2. 语法`fun.call(thisArg, arg1, arg2, ...)`
+   + thisArg：当前调用函数this的指向对象
+   + arg1等：传递的其他参数
+
+## 借用构造函数继承父类型属性
+1. 核心原理：通过call()把父类型的this指向子类型的this，这样就可以实现子类型继承父类型的属性
+2. 语法
+```JavaScript
+//借用父构造函数继承属性
+function Father(uname, age) {
+    //此处的this指向父构造函数的对象实例
+    this.uname = uname;
+    this.age = age;
+}
+function Son(uname, age) {
+    //将父构造函数的this改成子构造函数的this
+    Father.call(this, uname, age);
+}
+```
+## 借用原型对象继承父类型方法
+1. 继承方法不能通过赋值原型对象的方法实现，这样会导致本来只打算在子类型上新定义的方法会同步到父类型上
+2. 语法
+```JavaScript
+//借用父构造函数继承属性
+function Father() {
+}
+Father.prototype.money = function(){
+    console.log(100000)
+}
+Son.prototype = new Father();
+//如果利用对象的形式修改了原型对象，要用constructor指回原来的构造函数
+Son.prototype.constructor = Son;
+function Son() {
+}
+```
+
+## 类的本质
+1. class的本质还是一个函数，就是构造函数的另一种写法
+2. 类有原型对象prototype
+3. 类的原型对象prototype里有constructor指向类本身
+4. 类可以通过原型对象的方式添加方法
+5. 类创造的实例对象有__proto__指向类的原型对象
+6. ES6类其实就是语法糖，简单写法实现相同功能
+
+

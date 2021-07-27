@@ -1,33 +1,35 @@
-from collections import defaultdict
-def findWords(board, words):
-    n, m = len(board), len(board[0])
+def slidingPuzzle(board):
+    neighbor = {0: [1, 3], 1: [0, 2, 4], 2: [1, 5],
+                3: [0, 4], 4: [3, 1, 5], 5: [4, 2]}
+    start = ''
+    target = '123450'
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            start += str(board[i][j])
 
-    shot = defaultdict(list)
-    for i in range(n):
-        for j in range(m):
-            shot[board[i][j]].append((i, j))
+    queue = [start]
+    visited = set()
+    visited.add(start)
+    step = 0
+    while queue:
+        for _ in range(len(queue)):
+            cur = queue.pop(0)
+            if cur == target:
+                return step
+            idx = cur.index('0')
+            for near in neighbor[idx]:
+                new = swap(cur, idx, near)
+                if new not in visited:
+                    queue.append(new)
+                    visited.add(new)
+        step += 1
+    return -1
 
-    road = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-    def go(w, index, x, y):
-        if index == len(w):
-            return True
-        r[x][y] = 0
-        for a, b in road:
-            i, j = x + a, y + b
-            if -1 < i < n and -1 < j < m and r[i][j] 
-            and board[i][j] == w[index] and go(w, index + 1, i, j):
-                return True
-        r[x][y] = 1
-        return False
-    
-    res = []
-    for w in words:
-        for x, y in shot[w[0]]:
-            r = [[1] * m for _ in range(n)]
-            if go(w, 1, x, y):
-                res.append(w)
-                break
-    return res
+def swap(cur, i, j):
+    cur_list = list(cur)
+    cur_list[i], cur_list[j] = cur_list[j], cur_list[i]
+    return "".join(cur_list)
 
-findWords([["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]],["oath","pea","eat","rain"])
+
+slidingPuzzle([[1, 2, 3], [4, 0, 5]])
