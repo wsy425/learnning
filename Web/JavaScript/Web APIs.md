@@ -412,3 +412,17 @@ btn.onclick = function(){
 1. 单独创建一个JS文件
 2. 把函数写在里面
 3. 在html中引入JS文件
+
+# WebStorage js本地存储
+1. 存储内容大小一般支持 5MB 左右（不同浏览器可能还不一样） 
+2. 浏览器端通过Window.sessionStorage和Window.localStorage属性来实现本地存储机制 
+3. 相关API
+   xxxStorage.setItem('key', 'value')该方法接受一个键和值作为参数，会把键值对添加到存储中，如果键名存在，则更新其对应的值
+   xxxStorage.getItem('key')该方法接受一个键名作为参数，返回键名对应的值
+   xxxStorage.removeItem('key')该方法接受一个键名作为参数，并把该键名从存储中删除
+   xxxStorage.clear()该方法会清空存储中的所有数据
+4. 备注
+   1. SessionStorage存储的内容会随着浏览器窗口关闭而消失
+   2. LocalStorage存储的内容，需要手动清除才会消失
+   3. xxxStorage.getItem(xxx)如果 xxx 对应的 value 获取不到，那么getItem()的返回值是null
+   4. JSON.parse(null)的结果依然是null
